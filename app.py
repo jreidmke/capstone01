@@ -18,5 +18,5 @@ toolbar = DebugToolbarExtension(app)
 
 @app.route('/student/id')
 def show_student_detail():
-    flash('Pizza')
+    flash('Welcome {Parent Name}', 'good')
     return render_template('student-detail.html')
