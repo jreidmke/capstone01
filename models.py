@@ -8,6 +8,12 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
+def connect_db(app):
+    """Connects application to database"""
+
+    db.app = app
+    db.init_app(app)
+
 class School(db.Model):
     """School model"""
 
@@ -56,6 +62,8 @@ class Student(db.Model):
     dis_area = db.Column(db.String,
         nullable=False)
 
+    guardians = db.relationship('Family', cascade='all, delete', backref='student')
+
 class Guardian(db.Model):
     """Guardian model"""
 
@@ -69,10 +77,18 @@ class Guardian(db.Model):
     relation = db.Column(db.String,
         nullable=False)
 
+    students = db.relationship('Family', cascade='all, delete', backref='guardian')
 
+class Family(db.Model):
+    """Family model"""
 
-def connect_db(app):
-    """Connects application to database"""
+    __tablename__ = 'families'
 
-    db.app = app
-    db.init_app(app)
+    guardian_id = db.Column(db.Integer,
+        db.ForeignKey('guardians.id', ondelete="cascade"),
+        primary_key=True,
+        nullable=False)
+    student_id = db.Column(db.Integer,
+        db.ForeignKey('students.id', ondelete="cascade"),
+        primary_key=True,
+        nullable=False)
