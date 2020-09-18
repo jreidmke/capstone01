@@ -13,8 +13,11 @@ class School(db.Model):
 
     __tablename__ = 'schools'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False)
+    id = db.Column(db.Integer,
+        primary_key=True,
+        autoincrement=True)
+    name = db.Column(db.String,
+        nullable=False)
 
 
 class Teacher(db.Model):
@@ -22,20 +25,38 @@ class Teacher(db.Model):
 
     __tablename__ = 'teachers'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False)
-    title = db.Column(db.String, nullable=False)
-    school_id = db.Column(db.Integer, db.ForeignKey('schools.id', ondelete='cascade'), nullable=False)
+    id = db.Column(db.Integer,
+        primary_key=True,
+        autoincrement=True)
+    name = db.Column(db.String,
+        nullable=False)
+    title = db.Column(db.String,
+        nullable=False)
+    school_id = db.Column(db.Integer,
+        db.ForeignKey('schools.id', ondelete='cascade'),
+        nullable=False)
 
 class Student(db.Model):
     """Student model"""
 
-    __tablename____ = 'students'
+    __tablename__ = 'students'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False)
-    dob = db.Column(db.DateTime, nullable=False) # in YY, MM, DD format
+    id = db.Column(db.Integer,
+        primary_key=True,
+        autoincrement=True)
+    name = db.Column(db.String,
+        nullable=False)
+    dob = db.Column(db.Date,
+        nullable=False) # in python datetime.date format
+    grade = db.Column(db.Integer,
+        nullable=False)
+    teacher_id = db.Column(db.Integer,
+        db.ForeignKey('teachers.id'),
+        nullable=False)
+    dis_area = db.Column(db.String,
+        nullable=False)
 
+class Parent(db.Model)
 
 def connect_db(app):
     """Connects application to database"""
