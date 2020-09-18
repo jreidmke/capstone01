@@ -56,7 +56,20 @@ class Student(db.Model):
     dis_area = db.Column(db.String,
         nullable=False)
 
-class Parent(db.Model)
+class Guardian(db.Model):
+    """Guardian model"""
+
+    __tablename__ = 'guardians'
+
+    id = db.Column(db.Integer,
+        primary_key=True,
+        autoincrement=True)
+    name = db.Column(db.String,
+        nullable=False)
+    relation = db.Column(db.String,
+        nullable=False)
+
+
 
 def connect_db(app):
     """Connects application to database"""
