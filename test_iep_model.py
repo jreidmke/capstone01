@@ -29,3 +29,20 @@ class FamilyModelTestCase(TestCase):
             dis_area='OHI')
         db.session.add(self.stu)
         db.session.commit()
+
+        self.iep = IEP(student_id = self.stu.id,
+            teacher_id=self.tch.id)
+
+        db.session.add(self.iep)
+        db.session.commit()
+
+    def tearDown(self):
+        db.session.rollback()
+        Teacher.query.delete()
+        School.query.delete()
+        IEP.query.delete()
+
+    def test_iep_model(self):
+        iep = IEP.query.get(1)
+        self.assertEqual(self.iep.student_id, iep.student_id)
+        self.assertEqual(self.iep.teacher_id, iep.teacher_id)
