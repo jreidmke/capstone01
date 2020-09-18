@@ -103,14 +103,11 @@ class IEP(db.Model):
     id = db.Column(db.Integer,
         primary_key=True,
         autoincrement=True)
-
     date = db.Column(db.Date,
         default=datetime.date.today())
-
     student_id = db.Column(db.Integer,
         db.ForeignKey('students.id', ondelete="cascade"),
         nullable=False)
-
     teacher_id = db.Column(db.Integer,
         db.ForeignKey('teachers.id', ondelete='cascade'),
         nullable=False)
