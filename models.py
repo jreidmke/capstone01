@@ -103,12 +103,14 @@ class IEP(db.Model):
     id = db.Column(db.Integer,
         primary_key=True,
         autoincrement=True)
+
     date = db.Column(db.Date,
         default=datetime.date.today())
+
     student_id = db.Column(db.Integer,
         db.ForeignKey('students.id', ondelete="cascade"),
-        primary_key=True,
         nullable=False)
+
     teacher_id = db.Column(db.Integer,
         db.ForeignKey('teachers.id', ondelete='cascade'),
         nullable=False)
@@ -122,7 +124,8 @@ class Goal(db.Model):
         primary_key=True,
         autoincrement=True)
     iep_id = db.Column(db.Integer,
-        db.ForeignKey('ieps.id', ondelete='cascade'))
+        db.ForeignKey('ieps.id', ondelete="cascade"),
+        nullable=False)
     goal = db.Column(db.String,
         nullable=False)
     standard = db.Column(db.String,

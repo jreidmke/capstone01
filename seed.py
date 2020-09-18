@@ -1,6 +1,6 @@
 from app import db
 from datetime import date
-from models import School, Teacher, Student, Guardian, Family, IEP
+from models import School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
 
 db.drop_all()
 db.create_all()
@@ -82,3 +82,21 @@ db.session.add(iep6)
 db.session.commit()
 
 goal1 = Goal(iep_id=1, goal='Pay attention for 10 minutes', standard='Retain focus')
+goal2 = Goal(iep_id=1, goal='Finish math problems', standard='Math')
+goal3 = Goal(iep_id=1, goal='Read a whole book', standard='Reading')
+
+db.session.add(goal1)
+db.session.add(goal2)
+db.session.add(goal3)
+
+db.session.commit()
+
+cd1 = ClassworkData(goal_id=1, baseline='2 mins on task', current='3 1/2 mins on task', attainment='7 mins on task')
+cd2 = ClassworkData(goal_id=2, baseline='20% completion', current='35% completion', attainment='60% completion')
+cd3 = ClassworkData(goal_id=3, baseline='3/20 pgs read', current='3/20 pgs read', attainment='20 pgs read')
+
+db.session.add(cd1)
+db.session.add(cd2)
+db.session.add(cd3)
+
+db.session.commit()
