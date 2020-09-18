@@ -8,7 +8,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres4@localho
 db.drop_all()
 db.create_all()
 
-class TestStudentTestCase(TestCase):
+class StudentModelTestCase(TestCase):
     """Test student model functions"""
 
     def setUp(self):
