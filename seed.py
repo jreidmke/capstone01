@@ -1,6 +1,6 @@
 from app import db
 from datetime import date
-from models import School, Teacher, Student, Guardian, Family
+from models import School, Teacher, Student, Guardian, Family, IEP
 
 db.drop_all()
 db.create_all()
@@ -25,13 +25,19 @@ db.session.add(tch3)
 
 db.session.commit()
 
-std1 = Student(name='Fake Kid JR.', dob=date(2012, 1, 24), grade=1, teacher_id=1, dis_area='OHI')
-std2 = Student(name="Fake Kid", dob=date(2010, 4, 27), grade=4, teacher_id=2, dis_area='SDD')
-std3 = Student(name="Cool Dude", dob=date(2011, 7, 2), grade=8, teacher_id=3, dis_area='SLD')
+stu1 = Student(name='Fake Kid JR.', dob=date(2012, 1, 24), grade=1, teacher_id=1, dis_area='OHI')
+stu2 = Student(name="Fake Kid", dob=date(2010, 4, 27), grade=4, teacher_id=2, dis_area='SDD')
+stu3 = Student(name="Cool Dude", dob=date(2011, 7, 2), grade=8, teacher_id=3, dis_area='SLD')
+stu4 = Student(name="Cool Dude JR", dob=date(2011, 7, 12), grade=2, teacher_id=1, dis_area='SLD')
+stu5 = Student(name="Superman", dob=date(2011, 7, 12), grade=5, teacher_id=2, dis_area='EBD')
+stu6 = Student(name="Batman", dob=date(2011, 7, 12), grade=6, teacher_id=3, dis_area='EBD')
 
-db.session.add(std1)
-db.session.add(std2)
-db.session.add(std3)
+db.session.add(stu1)
+db.session.add(stu2)
+db.session.add(stu3)
+db.session.add(stu4)
+db.session.add(stu5)
+db.session.add(stu6)
 
 db.session.commit()
 
@@ -58,3 +64,21 @@ db.session.add(fam3)
 db.session.add(fam4)
 
 db.session.commit()
+
+iep1 = IEP(student_id=1, teacher_id=1)
+iep2 = IEP(student_id=2, teacher_id=2)
+iep3 = IEP(student_id=3, teacher_id=3)
+iep4 = IEP(student_id=4, teacher_id=1)
+iep5 = IEP(student_id=5, teacher_id=2)
+iep6 = IEP(student_id=6, teacher_id=3)
+
+db.session.add(iep1)
+db.session.add(iep2)
+db.session.add(iep3)
+db.session.add(iep4)
+db.session.add(iep5)
+db.session.add(iep6)
+
+db.session.commit()
+
+goal1 = Goal(iep_id=1, goal='Pay attention for 10 minutes', standard='Retain focus')
