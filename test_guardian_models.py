@@ -14,6 +14,6 @@ class GuardianModelTestCase(TestCase):
         guardian = Guardian(name='Fake Dad', relation='Dad')
         db.session.add(guardian)
         db.session.commit()
-        guardian_db = Guardian.query.get(1)
+        guardian_db = Guardian.query.get(guardian.id)
         self.assertEqual(guardian.name, guardian_db.name)
         self.assertEqual(guardian.relation, guardian_db.relation)

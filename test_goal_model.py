@@ -1,5 +1,5 @@
 from unittest import TestCase
-from models import db, Student, School, Teacher, IEP
+from models import db, Student, School, Teacher, IEP, Goal
 from app import app
 from datetime import date
 
@@ -8,7 +8,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres4@localho
 db.drop_all()
 db.create_all()
 
-class FamilyModelTestCase(TestCase):
+class GoalModelTestCase(TestCase):
     """Test student model functions"""
 
     def setUp(self):
@@ -36,13 +36,22 @@ class FamilyModelTestCase(TestCase):
         db.session.add(self.iep)
         db.session.commit()
 
+        self.goal = Goal(iep_id = self.iep.id,
+            goal="Increase CWPM to 23",
+            standard="Read with fluency")
+
+        db.session.add(self.goal)
+        db.session.commit()
+
     def tearDown(self):
         db.session.rollback()
         Teacher.query.delete()
         School.query.delete()
         IEP.query.delete()
+        Goal.query.delete()
 
-    def test_iep_model(self):
-        iep = IEP.query.get(self.iep.id)
-        self.assertEqual(self.iep.student_id, iep.student_id)
-        self.assertEqual(self.iep.teacher_id, iep.teacher_id)
+    def test_goal_model(self):
+        goal = Goal.query.get(self.goal.id)
+        self.assertEqual(self.goal.goal, goal.goal)
+        self.assertEqual(self.goal.standard, goal.standard)
+        self.assertEqual(self.goal.iep_id, self.iep.id)

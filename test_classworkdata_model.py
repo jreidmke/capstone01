@@ -1,5 +1,5 @@
 from unittest import TestCase
-from models import db, Student, School, Teacher, IEP
+from models import db, Student, School, Teacher, IEP, Goal
 from app import app
 from datetime import date
 
@@ -36,13 +36,9 @@ class FamilyModelTestCase(TestCase):
         db.session.add(self.iep)
         db.session.commit()
 
-    def tearDown(self):
-        db.session.rollback()
-        Teacher.query.delete()
-        School.query.delete()
-        IEP.query.delete()
+        self.goal = Goal(iep_id = self.iep.id,
+            goal="Increase CWPM to 23",
+            standard="Read with fluency")
 
-    def test_iep_model(self):
-        iep = IEP.query.get(self.iep.id)
-        self.assertEqual(self.iep.student_id, iep.student_id)
-        self.assertEqual(self.iep.teacher_id, iep.teacher_id)
+        db.session.add(self.goal)
+        db.session.commit()

@@ -28,9 +28,9 @@ class TeacherModelTestCase(TestCase):
         School.query.delete()
 
     def test_teacher_model(self):
-        tch1 = Teacher.query.get(1)
-        tch2 = Teacher.query.get(2)
-        tch3 = Teacher.query.get(3)
+        tch1 = Teacher.query.get(self.tch1.id)
+        tch2 = Teacher.query.get(self.tch2.id)
+        tch3 = Teacher.query.get(self.tch3.id)
         self.assertEqual(self.tch1.name, tch1.name)
         self.assertEqual(self.tch2.title, tch2.title)
         self.assertEqual(self.tch3.school_id, tch3.school_id)
