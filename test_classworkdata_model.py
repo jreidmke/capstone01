@@ -1,5 +1,5 @@
 from unittest import TestCase
-from models import db, Student, School, Teacher, IEP, Goal
+from models import db, Student, School, Teacher, IEP, Goal, ClassworkData
 from app import app
 from datetime import date
 
@@ -42,3 +42,24 @@ class FamilyModelTestCase(TestCase):
 
         db.session.add(self.goal)
         db.session.commit()
+
+        self.cw_data = ClassworkData(goal_id=self.goal.id,
+            baseline="12 CWPM",
+            current="15 CWPM",
+            attainment="23 CWPM")
+
+        db.session.add(self.cw_data)
+        db.session.commit()
+
+    def tearDown(self):
+        db.session.rollback()
+        Teacher.query.delete()
+        School.query.delete()
+        IEP.query.delete()
+        Goal.query.delete()
+
+    def test_cwdata_model(self):
+        cw_data = ClassworkData.query.get(self.goal.id)
+        self.assertEqual(self.cw_data.baseline, cw_data.baseline)
+        self.assertEqual(self.cw_data.current, cw_data.current)
+        self.assertEqual(self.cw_data.attainment, cw_data.attainment)
