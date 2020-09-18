@@ -57,8 +57,7 @@ class Student(db.Model):
     grade = db.Column(db.Integer,
         nullable=False)
     teacher_id = db.Column(db.Integer,
-        db.ForeignKey('teachers.id'),
-        nullable=False)
+        db.ForeignKey('teachers.id', ondelete='set null'))
     dis_area = db.Column(db.String,
         nullable=False)
 
