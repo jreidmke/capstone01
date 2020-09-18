@@ -11,10 +11,8 @@ class SchoolModelTestCase(TestCase):
     """Test school model functions"""
 
     def setUp(self):
-        """Create school"""
-
         self.school1 = School(name='Coultrap')
-        self.school2 = School(name="")
+        self.school2 = School(name="Chicago")
 
 
     def tearDown(self):
