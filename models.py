@@ -117,15 +117,13 @@ class Guardian(db.Model):
     def register(cls, first_name, last_name, relation, username, password):
         """Creates new user with hased password"""
 
-        hashword = bc.generate_password_hash(password)
-
-        hashword_utf8 = hashword.decode('utf8')
+        hashword = bc.generate_password_hash(password).decode('UTF-8')
 
         return cls(first_name=first_name,
             last_name=last_name,
             relation=relation,
             username=username,
-            password=hashword_utf8)
+            password=hashword)
 
     @classmethod
     def authenticate(cls, username, password):

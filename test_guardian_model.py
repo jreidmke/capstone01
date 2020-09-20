@@ -10,7 +10,7 @@ db.create_all()
 class GuardianModelTestCase(TestCase):
 
     def setUp(self):
-        self.guardian = Guardian(first_name='Fake',
+        self.guardian = Guardian.register(first_name='Fake',
             last_name='Dad',
             relation='Dad',
             username='fakedad123',
@@ -34,6 +34,11 @@ class GuardianModelTestCase(TestCase):
         self.assertEqual(self.guardian.relation, guardian_db.relation)
 
     def test_guardian_registration(self):
+        self.reg_obj = Guardian.register(first_name=self.guardian.first_name,
+            last_name=self.guardian.last_name,
+            relation=self.guardian.relation,
+            username=self.guardian.username,
+            password=self.guardian.password)
         self.assertEqual(self.reg_obj.username, self.guardian.username)
         self.assertEqual(self.reg_obj.first_name, self.guardian.first_name)
         self.assertEqual(self.reg_obj.last_name, self.guardian.last_name)
