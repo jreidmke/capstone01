@@ -34,7 +34,9 @@ class Teacher(db.Model):
     id = db.Column(db.Integer,
         primary_key=True,
         autoincrement=True)
-    name = db.Column(db.String,
+    first_name = db.Column(db.String,
+        nullable=False)
+    last_name = db.Column(db.String,
         nullable=False)
     title = db.Column(db.String,
         nullable=False)
@@ -54,7 +56,7 @@ class Teacher(db.Model):
 
         hashword_utf8 = hashword.decode('utf8')
 
-        return cls(name=name, title=title, school_id=school_id, username=username, password=hashword_utf8)
+        return cls(first_name=name, last_name=name, title=title, school_id=school_id, username=username, password=hashword_utf8)
 
     @classmethod
     def authenticate(cls, username, password):
@@ -75,7 +77,9 @@ class Student(db.Model):
     id = db.Column(db.Integer,
         primary_key=True,
         autoincrement=True)
-    name = db.Column(db.String,
+    first_name = db.Column(db.String,
+        nullable=False)
+    last_name = db.Column(db.String,
         nullable=False)
     dob = db.Column(db.Date,
         nullable=False) # in python datetime.date format
@@ -98,7 +102,9 @@ class Guardian(db.Model):
     id = db.Column(db.Integer,
         primary_key=True,
         autoincrement=True)
-    name = db.Column(db.String,
+    first_name = db.Column(db.String,
+        nullable=False)
+    last_name = db.Column(db.String,
         nullable=False)
     relation = db.Column(db.String,
         nullable=False)
@@ -115,7 +121,7 @@ class Guardian(db.Model):
 
         hashword_utf8 = hashword.decode('utf8')
 
-        return cls(name=name, title=title, school_id=school_id, username=username, password=hashword_utf8)
+        return cls(first_name=name, last_name=last_name, relation=relation, username=username, password=hashword_utf8)
 
     @classmethod
     def authenticate(cls, username, password):

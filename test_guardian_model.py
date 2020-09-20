@@ -11,9 +11,14 @@ class GuardianModelTestCase(TestCase):
     def test_guardian_model(self):
         Guardian.query.delete()
         db.session.rollback()
-        guardian = Guardian(name='Fake Dad', relation='Dad')
+        guardian = Guardian(first_name='Fake',
+            last_name='Dad',
+            relation='Dad',
+            username='fakedad123',
+            password='imfakedad')
         db.session.add(guardian)
         db.session.commit()
         guardian_db = Guardian.query.get(guardian.id)
-        self.assertEqual(guardian.name, guardian_db.name)
+        self.assertEqual(guardian.first_name, guardian_db.first_name)
+        self.assertEqual(guardian.last_name, guardian_db.last_name)
         self.assertEqual(guardian.relation, guardian_db.relation)

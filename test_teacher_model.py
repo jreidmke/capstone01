@@ -14,12 +14,14 @@ class TeacherModelTestCase(TestCase):
         self.school = School(name='Coultrap')
         db.session.add(self.school)
         db.session.commit()
-        self.tch1 = Teacher(name='Jess Christensen', title='K4-2nd Sped', school_id = self.school.id)
-        self.tch2 = Teacher(name='Tanya Scoma', title='3rd-5th Sped', school_id = self.school.id)
-        self.tch3 = Teacher(name='Sally Krueger', title='Middle School Sped', school_id = self.school.id)
+        self.tch1 = Teacher(first_name='Jess',
+            last_name='Christensen',
+            title='K4-2nd Sped',
+            school_id=self.school.id,
+            username='jessc',
+            password='packers123')
+
         db.session.add(self.tch1)
-        db.session.add(self.tch2)
-        db.session.add(self.tch3)
         db.session.commit()
 
     def tearDown(self):
@@ -29,8 +31,7 @@ class TeacherModelTestCase(TestCase):
 
     def test_teacher_model(self):
         tch1 = Teacher.query.get(self.tch1.id)
-        tch2 = Teacher.query.get(self.tch2.id)
-        tch3 = Teacher.query.get(self.tch3.id)
-        self.assertEqual(self.tch1.name, tch1.name)
-        self.assertEqual(self.tch2.title, tch2.title)
-        self.assertEqual(self.tch3.school_id, tch3.school_id)
+        self.assertEqual(self.tch1.first_name, tch1.first_name)
+        self.assertEqual(self.tch1.last_name, tch1.last_name)
+        self.assertEqual(self.tch1.title, tch1.title)
+        self.assertEqual(self.tch1.school_id, tch1.school_id)

@@ -12,17 +12,21 @@ class FamilyModelTestCase(TestCase):
     """Test student model functions"""
 
     def setUp(self):
-        self.school = School(name='Florida')
+        self.school = School(name='Minnesota')
         db.session.add(self.school)
         db.session.commit()
 
-        self.tch = Teacher(name='Jess Christensen',
+        self.tch = Teacher(first_name='Jess',
+            last_name='Christensen',
             title='K4-2nd Sped',
-            school_id = self.school.id)
+            school_id=self.school.id,
+            username='jessc',
+            password='packers123')
         db.session.add(self.tch)
         db.session.commit()
 
-        self.stu = Student(name='Fake Kid JR.',
+        self.stu = Student(first_name='Fake',
+            last_name='Kid',
             dob=date(2012, 1, 24),
             grade=1,
             teacher_id=self.tch.id,
@@ -30,15 +34,27 @@ class FamilyModelTestCase(TestCase):
         db.session.add(self.stu)
         db.session.commit()
 
-        self.guardian = Guardian(name='Fake Dad',
-            relation='Dad')
+        self.guardian = Guardian(first_name='Fake',
+            last_name='Dad',
+            relation='Dad',
+            username='fakedad123',
+            password='imfakedad')
+        self.guardian2 = Guardian(first_name='Fake',
+            last_name='Mom',
+            relation='Mom',
+            username='fakemom123',
+            password='imfakemom')
         db.session.add(self.guardian)
+        db.session.add(self.guardian2)
         db.session.commit()
 
         self.family = Family(guardian_id=self.guardian.id,
             student_id=self.stu.id)
+        self.family2 = Family(guardian_id=self.guardian2.id,
+            student_id=self.stu.id)
 
         db.session.add(self.family)
+        db.session.add(self.family2)
         db.session.commit()
 
     def tearDown(self):
@@ -50,5 +66,8 @@ class FamilyModelTestCase(TestCase):
 
     def test_family_model(self):
         fam = Family.query.get((self.guardian.id, self.stu.id)) #Family model has multiple primary keys
+        fam2 = Family.query.get((self.guardian2.id, self.stu.id))
         self.assertEqual(self.family.guardian_id, fam.guardian_id)
         self.assertEqual(self.family.student_id, fam.student_id)
+        self.assertEqual(self.family2.guardian_id, fam2.guardian_id)
+        self.assertEqual(self.family2.student_id, fam.student_id)
