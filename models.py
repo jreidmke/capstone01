@@ -2,8 +2,8 @@
 
 import datetime
 
-# from flask_bcrypt import Bcrypt
-# bcrypt = Bcrypt()
+from flask_bcrypt import Bcrypt
+bcrypt = Bcrypt()
 
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
@@ -41,6 +41,31 @@ class Teacher(db.Model):
     school_id = db.Column(db.Integer,
         db.ForeignKey('schools.id', ondelete='cascade'),
         nullable=False)
+    username = db.Column(db.String(20),
+        nullable=False)
+    password = db.Column(db.String(30),
+        nullable=False)
+
+    @classmethod
+    def register(cls, name, title, school_id, username, password):
+        """Creates new user with hased password"""
+
+        hashword = bc.generate_password_hash(password)
+
+        hashword_utf8 = hashword.decode('utf8')
+
+        return cls(name=name, title=title, school_id=school_id, username=username, password=hashword_utf8)
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Returns user object if password validated."""
+
+        user = User.query.filter_by(username=username).first()
+
+        if user and bc.check_password_hash(user.password, password):
+            return user
+        else:
+            return False
 
 class Student(db.Model):
     """Student model"""
@@ -77,6 +102,31 @@ class Guardian(db.Model):
         nullable=False)
     relation = db.Column(db.String,
         nullable=False)
+    username = db.Column(db.String(20),
+        nullable=False)
+    password = db.Column(db.String(30),
+        nullable=False)
+
+    @classmethod
+    def register(cls, name, title, school_id, username, password):
+        """Creates new user with hased password"""
+
+        hashword = bc.generate_password_hash(password)
+
+        hashword_utf8 = hashword.decode('utf8')
+
+        return cls(name=name, title=title, school_id=school_id, username=username, password=hashword_utf8)
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Returns user object if password validated."""
+
+        user = User.query.filter_by(username=username).first()
+
+        if user and bc.check_password_hash(user.password, password):
+            return user
+        else:
+            return False
 
     # students = db.relationship('Family', cascade='all, delete', backref='guardian')
 
