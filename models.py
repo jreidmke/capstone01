@@ -45,18 +45,25 @@ class Teacher(db.Model):
         nullable=False)
     username = db.Column(db.String(20),
         nullable=False)
-    password = db.Column(db.String(30),
+    password = db.Column(db.String,
         nullable=False)
 
     @classmethod
     def register(cls, first_name, last_name, title, school_id, username, password):
         """Creates new user with hased password"""
 
-        hashword = bc.generate_password_hash(password)
+        hashword = bc.generate_password_hash(password).decode('utf8')
 
-        hashword_utf8 = hashword.decode('utf8')
+        teacher = Teacher(first_name=first_name,
+            last_name=last_name,
+            title=title,
+            school_id=school_id,
+            username=username,
+            password=hashword)
 
-        return cls(first_name=first_name, last_name=last_name, title=title, school_id=school_id, username=username, password=hashword_utf8)
+        db.session.add(teacher)
+        db.session.commit()
+        return teacher
 
     @classmethod
     def authenticate(cls, username, password):

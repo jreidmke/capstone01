@@ -15,11 +15,11 @@ db.session.add(sch3)
 
 db.session.commit()
 
-tch1 = Teacher(name='Jess Christensen', title='K4-2nd Sped', school_id = 1)
+tch = Teacher(name='Jess Christensen', title='K4-2nd Sped', school_id = 1)
 tch2 = Teacher(name='Tanya Scoma', title='3rd-5th Sped', school_id = 2)
 tch3 = Teacher(name='Sally Krueger', title='Middle School Sped', school_id = 3)
 
-db.session.add(tch1)
+db.session.add(tch)
 db.session.add(tch2)
 db.session.add(tch3)
 
