@@ -1,7 +1,7 @@
 from flask import Flask, request, session, render_template, redirect, flash, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, School
-# from forms import {FORM NAME}
+from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
+from forms import TeacherRegisterForm
 
 app = Flask(__name__)
 
@@ -16,9 +16,41 @@ db.create_all()
 
 toolbar = DebugToolbarExtension(app)
 
+def login(user):
+    """Log in user."""
+
+    session[CURR_USER_KEY] = user.id
+
 @app.route('/teacher/register', methods=["GET", "POST"])
 def show_teacher_reg():
-    return render_template('teacher-reg.html')
+    form = TeacherRegisterForm()
+
+    if form.validate_on_submit():
+        try:
+            teacher = Teacher.register(
+                first_name=first_name,
+                last_name=last_name,
+                title=form.title.data,
+                school_id=form.school_id.data,
+                username=form.username.data,
+                password=form.password.data
+            )
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Username already taken", 'danger')
+            return render_template('users/signup.html', form=form)
+
+        login(teacher)
+
+        return redirect(f'/teacher/{teacher.id}')
+
+    return render_template('teacher-reg.html', form=form)
+
+@app.route('/teacher/<int:teacher_id>')
+def show_teacher_detail(teacher_id):
+    teacher = Teacher.query.get(teacher_id)
+    return render_template('teacher-detail.html', teacher=teacher)
 
 @app.route('/student/id')
 def show_student_detail():
