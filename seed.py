@@ -12,25 +12,77 @@ sch3 = School(name='Milwaukee')
 db.session.add(sch1)
 db.session.add(sch2)
 db.session.add(sch3)
-
 db.session.commit()
 
-tch = Teacher(name='Jess Christensen', title='K4-2nd Sped', school_id = 1)
-tch2 = Teacher(name='Tanya Scoma', title='3rd-5th Sped', school_id = 2)
-tch3 = Teacher(name='Sally Krueger', title='Middle School Sped', school_id = 3)
+tch1 = Teacher(first_name='Jess',
+    last_name='Christensen',
+    title='K4-2nd Sped',
+    school_id=1,
+    username='jessc',
+    password='packers123'
+    )
+tch2 = Teacher(first_name='Tanya',
+    last_name='Scoma',
+    title='3rd-5th Sped',
+    school_id = 2,
+    username='tanyas',
+    password='badgers123'
+    )
+tch3 = Teacher(first_name='Sally',
+    last_name='Krueger',
+    title='Middle School Sped',
+    school_id=3,
+    username='sallyk',
+    password='zach123'
+    )
 
-db.session.add(tch)
+db.session.add(tch1)
 db.session.add(tch2)
 db.session.add(tch3)
-
 db.session.commit()
 
-stu1 = Student(name='Fake Kid JR.', dob=date(2012, 1, 24), grade=1, teacher_id=1, dis_area='OHI')
-stu2 = Student(name="Fake Kid", dob=date(2010, 4, 27), grade=4, teacher_id=2, dis_area='SDD')
-stu3 = Student(name="Cool Dude", dob=date(2011, 7, 2), grade=8, teacher_id=3, dis_area='SLD')
-stu4 = Student(name="Cool Dude JR", dob=date(2011, 7, 12), grade=2, teacher_id=1, dis_area='SLD')
-stu5 = Student(name="Superman", dob=date(2011, 7, 12), grade=5, teacher_id=2, dis_area='EBD')
-stu6 = Student(name="Batman", dob=date(2011, 7, 12), grade=6, teacher_id=3, dis_area='EBD')
+stu1 = Student(first_name='Fake',
+    last_name='Kid JR.',
+    dob=date(2012, 1, 24),
+    grade=1,
+    teacher_id=1,
+    dis_area='OHI'
+    )
+stu2 = Student(first_name="Fake",
+    last_name="Kid",
+    dob=date(2010, 4, 27),
+    grade=4,
+    teacher_id=2,
+    dis_area='SDD'
+    )
+stu3 = Student(first_name="Cool",
+    last_name="Dude",
+    dob=date(2011, 7, 2),
+    grade=8,
+    teacher_id=3,
+    dis_area='SLD'
+    )
+stu4 = Student(first_name="Cool",
+    last_name="Dude JR",
+    dob=date(2011, 7, 12),
+    grade=2,
+    teacher_id=1,
+    dis_area='SLD'
+    )
+stu5 = Student(first_name="Superman",
+    last_name="Kent",
+    dob=date(2011, 7, 12),
+    grade=5,
+    teacher_id=2,
+    dis_area='EBD'
+    )
+stu6 = Student(first_name="Batman",
+    last_name="Wayne",
+    dob=date(2011, 7, 12),
+    grade=6,
+    teacher_id=3,
+    dis_area='EBD'
+    )
 
 db.session.add(stu1)
 db.session.add(stu2)
@@ -38,19 +90,37 @@ db.session.add(stu3)
 db.session.add(stu4)
 db.session.add(stu5)
 db.session.add(stu6)
-
 db.session.commit()
 
-par1 = Guardian(name='Fake Mom', relation='Mother')
-par2 = Guardian(name='Fake Dad', relation='Father')
-par3 = Guardian(name='Fake Aunt', relation='Aunt')
-par4 = Guardian(name='Fake Brother', relation='Brother')
+par1 = Guardian(first_name='Fake',
+    last_name='Mom',
+    relation='Mother',
+    username='fakemom123',
+    password='iamfake'
+    )
+par2 = Guardian(first_name='Fake',
+    last_name='Dad',
+    relation='Father',
+    username='fakedad123',
+    password='iamfake'
+    )
+par3 = Guardian(first_name='Fake',
+    last_name='Aunt',
+    relation='Aunt',
+    username='fakeaunt123',
+    password='iamfake'
+    )
+par4 = Guardian(first_name='Fake',
+    last_name='Brother',
+    relation='Brother',
+    username='fakebro',
+    password='iamfake'
+    )
 
 db.session.add(par1)
 db.session.add(par2)
 db.session.add(par3)
 db.session.add(par4)
-
 db.session.commit()
 
 fam1 = Family(student_id=1, guardian_id=1)
@@ -62,7 +132,6 @@ db.session.add(fam1)
 db.session.add(fam2)
 db.session.add(fam3)
 db.session.add(fam4)
-
 db.session.commit()
 
 iep1 = IEP(student_id=1, teacher_id=1)
@@ -78,7 +147,6 @@ db.session.add(iep3)
 db.session.add(iep4)
 db.session.add(iep5)
 db.session.add(iep6)
-
 db.session.commit()
 
 goal1 = Goal(iep_id=1, goal='Pay attention for 10 minutes', standard='Retain focus')
@@ -102,7 +170,6 @@ db.session.add(goal7)
 db.session.add(goal8)
 db.session.add(goal9)
 db.session.add(goal10)
-
 db.session.commit()
 
 cd1 = ClassworkData(goal_id=1, baseline='2 mins on task', current='3 1/2 mins on task', attainment='7 mins on task')
@@ -126,5 +193,4 @@ db.session.add(cd7)
 db.session.add(cd8)
 db.session.add(cd9)
 db.session.add(cd10)
-
 db.session.commit()
