@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} Teacher Detail {% endblock %}
+
+{% block content %}
+
+{{teacher.first_name + teacher.last_name}}
+
+{{teacher.school.name}}
+
+{{teacher.title}}
+
+{{teacher.username}}
+
+{{teacher.password}}
+
+{% endblock %}
