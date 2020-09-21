@@ -3,3 +3,13 @@
     color: gray;
     font-size: 50px;
 }
+
+.bad {
+    background-color: red;
+    color: gray;
+    font-size: 50px;
+}
+
+input {
+    margin: 10px;
+}
