@@ -49,6 +49,8 @@ class Teacher(db.Model):
     password = db.Column(db.String,
         nullable=False)
 
+    school = db.relationship('School')
+
     @classmethod
     def register(cls, first_name, last_name, title, school_id, username, password):
         """Creates new user with hased password"""

@@ -1,7 +1,10 @@
 from flask import Flask, request, session, render_template, redirect, flash, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
 from forms import TeacherRegisterForm
+
+CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 
@@ -28,8 +31,8 @@ def show_teacher_reg():
     if form.validate_on_submit():
         try:
             teacher = Teacher.register(
-                first_name=first_name,
-                last_name=last_name,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
                 title=form.title.data,
                 school_id=form.school_id.data,
                 username=form.username.data,
@@ -38,8 +41,8 @@ def show_teacher_reg():
             db.session.commit()
 
         except IntegrityError:
-            flash("Username already taken", 'danger')
-            return render_template('users/signup.html', form=form)
+            flash("Username already taken", 'bad')
+            return render_template('teacher-reg.html', form=form)
 
         login(teacher)
 
