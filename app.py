@@ -2,7 +2,7 @@ from flask import Flask, request, session, render_template, redirect, flash, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
-from forms import TeacherRegisterForm
+from forms import TeacherRegisterForm, GuardianRegisterForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -54,6 +54,36 @@ def show_teacher_reg():
 def show_teacher_detail(teacher_id):
     teacher = Teacher.query.get(teacher_id)
     return render_template('teacher-detail.html', teacher=teacher)
+
+@app.route('/guardian/register', methods=["GET", "POST"])
+def show_guardian_reg():
+    form = GuardianRegisterForm()
+
+    if form.validate_on_submit():
+        try:
+            guardian = Guardian.register(
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                relation=form.relation.data,
+                username=form.username.data,
+                password=form.password.data
+            )
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Username already taken", 'bad')
+            return render_template('teacher-reg.html', form=form)
+
+        login(guardian)
+
+        return redirect(f'/guardian/{guardian.id}')
+
+    return render_template('guardian-reg.html', form=form)
+
+@app.route('/teacher/<int:guardian_id>')
+def show_guardian_detail(guardian_id):
+    guardian = Teacher.query.get(guardian_id)
+    return render_template('guardian-detail.html', guardian=guardian)
 
 @app.route('/student/id')
 def show_student_detail():

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} Guardian Detail {% endblock %}
+
+{% block content %}
+
+{{guardian.first_name + guardian.last_name}}
+
+{{guardian.relation}}
+
+{{guardian.username}}
+
+{{guardian.password}}
+
+{% endblock %}
