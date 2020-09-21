@@ -80,7 +80,7 @@ def show_guardian_reg():
 
     return render_template('guardian-reg.html', form=form)
 
-@app.route('/teacher/<int:guardian_id>')
+@app.route('/guardian/<int:guardian_id>')
 def show_guardian_detail(guardian_id):
     guardian = Teacher.query.get(guardian_id)
     return render_template('guardian-detail.html', guardian=guardian)
