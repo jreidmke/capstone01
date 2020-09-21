@@ -201,7 +201,10 @@ class Goal(db.Model):
         nullable=False)
 
 class ClassworkData(db.Model):
-    """Classwork Data model. For each goal, we will store the baseline (data pertaining to student's present level for goal), level of attainment (the level at which the student is considered to have met his or her goal), and current level (the level the student is currently at for goal, to be updated by teacher)"""
+    """Classwork Data model. For each goal, we will store the baseline
+    (data pertaining to student's present level for goal), level of attainment
+    (the level at which the student is considered to have met his or her goal),
+    and current level (the level the student is currently at for goal, to be updated by teacher)"""
 
     __tablename__ = 'classwork_data'
 
