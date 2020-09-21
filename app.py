@@ -16,6 +16,10 @@ db.create_all()
 
 toolbar = DebugToolbarExtension(app)
 
+@app.route('/teacher/register', methods=["GET", "POST"])
+def show_teacher_reg():
+    return render_template('teacher-reg.html')
+
 @app.route('/student/id')
 def show_student_detail():
     # flash('Welcome {Parent Name}', 'good')
