@@ -24,11 +24,23 @@ def login(user):
 
     session[CURR_USER_KEY] = user.id
 
+
+# Landing page.
+
+@app.route('/')
+def show_landing_page()
+
+# Teacher Routing. Register and Login.
+
 @app.route('/teacher/register', methods=["GET", "POST"])
 def show_teacher_reg():
     form = TeacherRegisterForm()
 
     if form.validate_on_submit():
+
+        # right here. check if school id is valid.
+        id = form.school_id.data
+
         try:
             teacher = Teacher.register(
                 first_name=form.first_name.data,
