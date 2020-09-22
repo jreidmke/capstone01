@@ -2,7 +2,7 @@ from flask import Flask, request, session, render_template, redirect, flash, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
-from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -137,3 +137,23 @@ def show_guardian_detail(guardian_id):
 def show_student_detail():
     # flash('Welcome {Parent Name}', 'good')
     return render_template('student-detail.html')
+
+@app.route('/teacher/<int:teacher_id>/add-student', methods=["GET", "POST"])
+def add_student(teacher_id):
+    form = StudentRegisterForm()
+
+    if form.validate_on_submit():
+        student = Student(
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            dob=form.dob.data,
+            teacher_id=teacher_id,
+            dis_area=form.dis_area.data
+        )
+
+        db.session.add(student)
+        db.session.commit()
+
+        return redirect(f'teacher/{teacher_id}')
+
+    return render_template('add-student.html', form=form)
