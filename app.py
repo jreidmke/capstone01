@@ -85,6 +85,25 @@ def show_teacher_detail(teacher_id):
     teacher = Teacher.query.get(teacher_id)
     return render_template('teacher/teacher-detail.html', teacher=teacher)
 
+# Guardian Routing. Register and Login.
+
+@app.route('/guardian/login', methods=["GET", "POST"])
+def guardian_login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        guardian = Guardian.authenticate(form.username.data,
+            form.password.data)
+
+        if guardian:
+            login(guardian)
+            flash(f"Welcome {guardian.first_name}!", "good")
+            return redirect(f"/guardian/{guardian.id}")
+
+        flash("Invalid username or password", "bad")
+
+    return render_template("guardian/guardian-login.html", form=form)
+
 @app.route('/guardian/register', methods=["GET", "POST"])
 def show_guardian_reg():
     form = GuardianRegisterForm()
@@ -98,7 +117,6 @@ def show_guardian_reg():
                 username=form.username.data,
                 password=form.password.data
             )
-            db.session.commit()
 
         except IntegrityError:
             flash("Username already taken", 'bad')
@@ -112,7 +130,7 @@ def show_guardian_reg():
 
 @app.route('/guardian/<int:guardian_id>')
 def show_guardian_detail(guardian_id):
-    guardian = Teacher.query.get(guardian_id)
+    guardian = Guardian.query.get(guardian_id)
     return render_template('guardian/guardian-detail.html', guardian=guardian)
 
 @app.route('/student/id')

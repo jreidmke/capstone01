@@ -136,6 +136,7 @@ class Guardian(db.Model):
             password=hashword)
 
         db.session.add(guardian)
+        db.session.commit()
         return guardian
 
     @classmethod
@@ -150,11 +151,6 @@ class Guardian(db.Model):
             return False
 
     # students = db.relationship('Family', cascade='all, delete', backref='guardian')
-
-    @classmethod
-    def huh(username, password):
-        hashword = bc.generate_password_hash(password).decode('UTF-8')
-
 
 class Family(db.Model):
     """Family model"""
