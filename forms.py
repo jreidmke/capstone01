@@ -23,6 +23,17 @@ class GuardianRegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Confirm Password')
 
+class StudentRegisterForm(FlaskForm):
+    """For for registering student"""
+
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
+    dob = DateField('Date of Birth', validators=[DataRequired()])
+    grade = IntegerField('Grade (Ex. 1 or 10)', validators=[DataRequired()])
+    # teacher_id =
+    dis_area = StringField('Disability Area', validators=[DataRequired()])
+
+
 class LoginForm(FlaskForm):
     """Form for teacher or guardian login"""
 
