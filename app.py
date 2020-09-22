@@ -84,7 +84,8 @@ def teacher_reg():
 @app.route('/teacher/<int:teacher_id>')
 def show_teacher_detail(teacher_id):
     teacher = Teacher.query.get(teacher_id)
-    return render_template('teacher/teacher-detail.html', teacher=teacher)
+    students = Student.query.filter_by(teacher_id=teacher_id).all()
+    return render_template('teacher/teacher-detail.html', teacher=teacher, students=students)
 
 # Guardian Routing. Register and Login.
 
