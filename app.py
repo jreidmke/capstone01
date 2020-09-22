@@ -44,11 +44,11 @@ def teacher_login():
         if teacher:
             login(teacher)
             flash(f"Welcome {teacher.first_name}!", "good")
-            return redirect(f"teacher/{teacher.id}")
+            return redirect(f"/teacher/{teacher.id}")
 
         flash("Invalid username or password", "bad")
 
-    return render_template("teacher-login.html")
+    return render_template("teacher/teacher-login.html", form=form)
 
 @app.route('/teacher/register', methods=["GET", "POST"])
 def teacher_reg():
