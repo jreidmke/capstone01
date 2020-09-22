@@ -3,6 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
 from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm
+from datetime import date
 
 CURR_USER_KEY = "curr_user"
 
@@ -147,6 +148,7 @@ def add_student(teacher_id):
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             dob=form.dob.data,
+            grade=form.grade.data,
             teacher_id=teacher_id,
             dis_area=form.dis_area.data
         )
@@ -154,6 +156,6 @@ def add_student(teacher_id):
         db.session.add(student)
         db.session.commit()
 
-        return redirect(f'teacher/{teacher_id}')
+        return redirect(f'/teacher/{teacher_id}')
 
-    return render_template('add-student.html', form=form)
+    return render_template('teacher/add-student.html', form=form)

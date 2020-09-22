@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField
+from wtforms import StringField, PasswordField, SelectField, DateField, IntegerField
 from wtforms.validators import DataRequired, Length, EqualTo
 
 class TeacherRegisterForm(FlaskForm):
@@ -28,7 +28,7 @@ class StudentRegisterForm(FlaskForm):
 
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    dob = DateField('Date of Birth', validators=[DataRequired()])
+    dob = DateField('Date of Birth (Format: M/D/YYYY)', format='%m/%d/%Y', validators=[DataRequired()])
     grade = IntegerField('Grade (Ex. 1 or 10)', validators=[DataRequired()])
     # teacher_id =
     dis_area = StringField('Disability Area', validators=[DataRequired()])
