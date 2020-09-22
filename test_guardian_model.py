@@ -15,11 +15,6 @@ class GuardianModelTestCase(TestCase):
             relation='Dad',
             username='fakedad123',
             password='imfakedad')
-        self.reg_obj = Guardian.register(first_name=self.guardian.first_name,
-            last_name=self.guardian.last_name,
-            relation=self.guardian.relation,
-            username=self.guardian.username,
-            password=self.guardian.password)
 
     def tearDown(self):
         Guardian.query.delete()
@@ -34,15 +29,23 @@ class GuardianModelTestCase(TestCase):
         self.assertEqual(self.guardian.relation, guardian_db.relation)
 
     def test_guardian_registration(self):
-        self.assertEqual(self.reg_obj.username, self.guardian.username)
-        self.assertEqual(self.reg_obj.first_name, self.guardian.first_name)
-        self.assertEqual(self.reg_obj.last_name, self.guardian.last_name)
+        reg_obj = Guardian.register(first_name=self.guardian.first_name,
+            last_name=self.guardian.last_name,
+            relation=self.guardian.relation,
+            username=self.guardian.username,
+            password=self.guardian.password)
+        self.assertEqual(reg_obj.username, self.guardian.username)
+        self.assertEqual(reg_obj.first_name, self.guardian.first_name)
+        self.assertEqual(reg_obj.last_name, self.guardian.last_name)
 
     def test_guardian_authentication(self):
-        db.session.add(self.guardian)
-        db.session.commit()
+        reg_obj = Guardian.register(first_name=self.guardian.first_name,
+            last_name=self.guardian.last_name,
+            relation=self.guardian.relation,
+            username=self.guardian.username,
+            password=self.guardian.password)
         auth_obj = Guardian.authenticate(self.guardian.username, self.guardian.password)
-        self.assertEqual(auth_obj, self.reg_obj)
+        self.assertEqual(auth_obj, reg_obj)
 
     def test_failed_user_authentication(self):
         auth_obj = Guardian.authenticate('TESTUSER', 'foo')

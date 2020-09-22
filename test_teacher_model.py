@@ -14,6 +14,7 @@ class TeacherModelTestCase(TestCase):
         self.school = School(name='Coultrap')
         db.session.add(self.school)
         db.session.commit()
+
         self.tch = Teacher(first_name='Jess',
             last_name='Christensen',
             title='K4-2nd Sped',
