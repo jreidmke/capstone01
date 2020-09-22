@@ -28,7 +28,8 @@ def login(user):
 # Landing page.
 
 @app.route('/')
-def show_landing_page()
+def show_landing_page():
+    return render_template('landing-page.html')
 
 # Teacher Routing. Register and Login.
 
