@@ -2,7 +2,7 @@ from flask import Flask, request, session, render_template, redirect, flash, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
-from forms import TeacherRegisterForm, GuardianRegisterForm
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -33,8 +33,25 @@ def show_landing_page():
 
 # Teacher Routing. Register and Login.
 
+@app.route('/teacher/login', methods=["GET", "POST"])
+def teacher_login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        teacher = Teacher.authenticate(form.username.data,
+            form.password.data)
+
+        if teacher:
+            login(teacher)
+            flash(f"Welcome {teacher.first_name}!", "good")
+            return redirect(f"teacher/{teacher.id}")
+
+        flash("Invalid username or password", "bad")
+
+    return render_template("teacher-login.html")
+
 @app.route('/teacher/register', methods=["GET", "POST"])
-def show_teacher_reg():
+def teacher_reg():
     form = TeacherRegisterForm()
 
     if form.validate_on_submit():

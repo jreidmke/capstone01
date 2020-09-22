@@ -22,3 +22,9 @@ class GuardianRegisterForm(FlaskForm):
     username = StringField('User Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Confirm Password')
+
+class LoginForm(FlaskForm):
+    """Form for teacher or guardian login"""
+
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
