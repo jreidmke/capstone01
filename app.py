@@ -55,18 +55,18 @@ def show_teacher_reg():
 
         except IntegrityError:
             flash("Username already taken", 'bad')
-            return render_template('teacher-reg.html', form=form)
+            return render_template('teacher/teacher-reg.html', form=form)
 
         login(teacher)
 
         return redirect(f'/teacher/{teacher.id}')
 
-    return render_template('teacher-reg.html', form=form)
+    return render_template('teacher/teacher-reg.html', form=form)
 
 @app.route('/teacher/<int:teacher_id>')
 def show_teacher_detail(teacher_id):
     teacher = Teacher.query.get(teacher_id)
-    return render_template('teacher-detail.html', teacher=teacher)
+    return render_template('teacher/teacher-detail.html', teacher=teacher)
 
 @app.route('/guardian/register', methods=["GET", "POST"])
 def show_guardian_reg():
@@ -85,18 +85,18 @@ def show_guardian_reg():
 
         except IntegrityError:
             flash("Username already taken", 'bad')
-            return render_template('teacher-reg.html', form=form)
+            return render_template('teacher/teacher-reg.html', form=form)
 
         login(guardian)
 
         return redirect(f'/guardian/{guardian.id}')
 
-    return render_template('guardian-reg.html', form=form)
+    return render_template('guardian/guardian-reg.html', form=form)
 
 @app.route('/guardian/<int:guardian_id>')
 def show_guardian_detail(guardian_id):
     guardian = Teacher.query.get(guardian_id)
-    return render_template('guardian-detail.html', guardian=guardian)
+    return render_template('guardian/guardian-detail.html', guardian=guardian)
 
 @app.route('/student/id')
 def show_student_detail():
