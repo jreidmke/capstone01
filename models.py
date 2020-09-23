@@ -44,6 +44,7 @@ class Teacher(db.Model):
         db.ForeignKey('schools.id', ondelete='cascade'),
         nullable=False)
     username = db.Column(db.String(20),
+        unique=True,
         nullable=False)
     password = db.Column(db.String,
         nullable=False)
