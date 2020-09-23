@@ -143,7 +143,11 @@ def show_student_detail():
 @app.route('/teacher/<int:teacher_id>/add-student', methods=["GET", "POST"])
 def add_student(teacher_id):
     form = StudentRegisterForm()
-
+    # print("************************")
+    # print(form.dob.data)
+    # print("************************")
+    # import pdb
+    # pdb.set_trace()
     if form.validate_on_submit():
         student = Student(
             first_name=form.first_name.data,
@@ -153,6 +157,8 @@ def add_student(teacher_id):
             teacher_id=teacher_id,
             dis_area=form.dis_area.data
         )
+
+
 
         db.session.add(student)
         db.session.commit()
