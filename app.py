@@ -163,9 +163,24 @@ def add_student(teacher_id):
 
 @app.route('/teacher/<int:teacher_id>/add-family', methods=["GET", "POST"])
 def add_family(teacher_id):
-    form = FamilyForm()
     teacher = Teacher.query.get(teacher_id)
+    form = FamilyForm()
+    if form.validate_on_submit():
+        guardian = Guardian.query.filter_by(
+            first_name=form.guardian_first_name.data,
+            last_name=form.guardian_last_name.data,
+            username=form.guardian_username.data).first()
+        student = Student.query.filter_by(
+            first_name=form.student_first_name.data,
+            last_name=form.student_last_name.data).first()
+        family = Family(
+            guardian_id=guardian.id,
+            student_id=student.id
+        )
+        db.session.add(family)
+        db.session.commit()
+        flash(f"Family created! Guardian {guardian.first_name} {guardian.last_name}, Student: {student.first_name} {student.last_name}!", "good")
+        return redirect(f'/teacher/{teacher_id}')
 
 
-
-    return render_template('add-family.html', form=form, teacher=teacher)
+    return render_template('/teacher/add-family.html', form=form, teacher=teacher)
