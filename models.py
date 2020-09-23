@@ -119,6 +119,7 @@ class Guardian(db.Model):
     relation = db.Column(db.String,
         nullable=False)
     username = db.Column(db.String(20),
+        unique=True,
         nullable=False)
     password = db.Column(db.String,
         nullable=False)
