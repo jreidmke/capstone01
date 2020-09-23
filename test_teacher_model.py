@@ -21,6 +21,7 @@ class TeacherModelTestCase(TestCase):
             school_id=self.school.id,
             username='jessc',
             password='packers123')
+
         self.reg_obj = Teacher.register(first_name=self.tch.first_name,
             last_name=self.tch.last_name,
             title=self.tch.title,
@@ -33,23 +34,12 @@ class TeacherModelTestCase(TestCase):
         Teacher.query.delete()
         School.query.delete()
 
-    def test_teacher_model(self):
-        db.session.add(self.tch)
-        db.session.commit()
-        tch = Teacher.query.get(self.tch.id)
-        self.assertEqual(self.tch.first_name, tch.first_name)
-        self.assertEqual(self.tch.last_name, tch.last_name)
-        self.assertEqual(self.tch.title, tch.title)
-        self.assertEqual(self.tch.school_id, tch.school_id)
-
     def test_guardian_registration(self):
         self.assertEqual(self.reg_obj.username, self.tch.username)
         self.assertEqual(self.reg_obj.first_name, self.tch.first_name)
         self.assertEqual(self.reg_obj.last_name, self.tch.last_name)
 
     def test_guardian_authentication(self):
-        db.session.add(self.tch)
-        db.session.commit()
         auth_obj = Teacher.authenticate(self.tch.username, self.tch.password)
         self.assertEqual(auth_obj, self.reg_obj)
 
