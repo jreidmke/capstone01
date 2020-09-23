@@ -15,6 +15,10 @@
             <hr class="my-4">
     </div>
 
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class="{{ category }} text-center">{{ message }}</div>
+    {% endfor %}
+
     {% block content %} {% endblock %}
 </body>
 </html>
