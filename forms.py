@@ -32,8 +32,7 @@ class StudentRegisterForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired()])
     dob = DateField('Date of Birth (Format: M/D/YYYY)', validators=[DataRequired()])
     grade = IntegerField('Grade (Ex. 1 or 10)', validators=[DataRequired()])
-    # teacher_id =
-    dis_area = StringField('Disability Area', validators=[DataRequired()])
+    dis_area = SelectField('Disability Area', choices=['OHI', 'SDD', 'SLD', 'SLP', 'EBD', 'OI'], validators=[DataRequired()])
 
 
 class LoginForm(FlaskForm):

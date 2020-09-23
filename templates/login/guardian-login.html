@@ -1,4 +1,4 @@
-{% extends 'teacher-base.html' %}
+{% extends 'base.html' %}
 
 {% block title %} Teacher Registration {% endblock %}
 
@@ -8,7 +8,7 @@
 <div class="container mt-3">
     <div class="col-6">
 
-        <h1>Teacher Registration</h1>
+        <h1>Parent/Guardian Login</h1>
 
         <form method="POST" id="user_form">
             {{ form.hidden_tag() }}
@@ -30,7 +30,7 @@
 <div class="container mt-5">
     <div class="col">
         <div class="row">
-            <h4>New to IEP+? Register <a href="/teacher/register">here!</a></h4>
+            <h4>New to IEP+? Register <a href="/guardian/register">here!</a></h4>
         </div>
     </div>
 </div>
