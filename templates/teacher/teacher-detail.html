@@ -4,28 +4,22 @@
 
 {% block content %}
 
-{{teacher.first_name + teacher.last_name}}
-
-{{teacher.school.name}}
-
-{{teacher.title}}
-
-{{teacher.username}}
-
-{{teacher.password}}
-
 <div class="container">
-    <div class="col">
-        <div class="row">
-            <h4>Add a student? <a href="/teacher/{{teacher.id}}/add-student">Click Here!</a></h4>
-        </div>
+    <h1 class="text-center display-4">Student List</h1>
+    <div class="row">
+
+            {% for student in students %}
+                <div class="card m-2" style="width: 20rem;">
+                    <img class="card-img-top" src="../../static/images/anon-profile.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{student.first_name + ' ' + student.last_name + ', '}} Grade {{student.grade}}</h5>
+                        <p class="card-text">DOB: {{student.dob}} || Disability Area: {{student.dis_area}}</p>
+                        <a href="#" class="btn btn-primary">Student Details</a>
+                    </div>
+                </div>
+            {% endfor %}
+
     </div>
 </div>
-
-{% for student in students %}
-
-<h1>{{student}}</h1>
-
-{% endfor %}
 
 {% endblock %}

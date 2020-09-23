@@ -142,6 +142,7 @@ def show_student_detail():
 
 @app.route('/teacher/<int:teacher_id>/add-student', methods=["GET", "POST"])
 def add_student(teacher_id):
+    teacher = Teacher.query.get(teacher_id)
     form = StudentRegisterForm()
     if form.validate_on_submit():
         student = Student(
@@ -153,11 +154,9 @@ def add_student(teacher_id):
             dis_area=form.dis_area.data
         )
 
-
-
         db.session.add(student)
         db.session.commit()
 
         return redirect(f'/teacher/{teacher_id}')
 
-    return render_template('teacher/add-student.html', form=form)
+    return render_template('teacher/add-student.html', form=form, teacher=teacher)
