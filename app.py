@@ -2,7 +2,7 @@ from flask import Flask, request, session, render_template, redirect, flash, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
-from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm
 from datetime import date
 
 CURR_USER_KEY = "curr_user"
@@ -160,3 +160,12 @@ def add_student(teacher_id):
         return redirect(f'/teacher/{teacher_id}')
 
     return render_template('teacher/add-student.html', form=form, teacher=teacher)
+
+@app.route('/teacher/<int:teacher_id>/add-family', methods=["GET", "POST"])
+def add_family(teacher_id):
+    form = FamilyForm()
+    teacher = Teacher.query.get(teacher_id)
+
+
+
+    return render_template('add-family.html', form=form, teacher=teacher)

@@ -40,3 +40,12 @@ class LoginForm(FlaskForm):
 
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+
+class FamilyForm(FlaskForm):
+    """Form for teachers to create families"""
+
+    parent_first_name = StringField('Parent First Name', validators=[DataRequired()])
+    parent_last_name = StringField('Parent Last Name', validators=[DataRequired()])
+    parent_username = StringField('Parent Username', validators=[DataRequired()])
+    student_first_name = StringField('Student First Name', validators=[DataRequired()])
+    student_last_name = StringField('Student Last Name', validators=[DataRequired()])
