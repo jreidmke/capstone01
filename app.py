@@ -49,7 +49,7 @@ def teacher_login():
 
         flash("Invalid username or password", "bad")
 
-    return render_template("teacher/teacher-login.html", form=form)
+    return render_template("login/teacher-login.html", form=form)
 
 @app.route('/teacher/register', methods=["GET", "POST"])
 def teacher_reg():
@@ -73,13 +73,13 @@ def teacher_reg():
 
         except IntegrityError:
             flash("Username already taken", 'bad')
-            return render_template('teacher/teacher-reg.html', form=form)
+            return render_template('register/teacher-reg.html', form=form)
 
         login(teacher)
 
         return redirect(f'/teacher/{teacher.id}')
 
-    return render_template('teacher/teacher-reg.html', form=form)
+    return render_template('register/teacher-reg.html', form=form)
 
 @app.route('/teacher/<int:teacher_id>')
 def show_teacher_detail(teacher_id):
@@ -104,7 +104,7 @@ def guardian_login():
 
         flash("Invalid username or password", "bad")
 
-    return render_template("guardian/guardian-login.html", form=form)
+    return render_template("login/guardian-login.html", form=form)
 
 @app.route('/guardian/register', methods=["GET", "POST"])
 def show_guardian_reg():
@@ -122,13 +122,13 @@ def show_guardian_reg():
 
         except IntegrityError:
             flash("Username already taken", 'bad')
-            return render_template('teacher/teacher-reg.html', form=form)
+            return render_template('register/teacher-reg.html', form=form)
 
         login(guardian)
 
         return redirect(f'/guardian/{guardian.id}')
 
-    return render_template('guardian/guardian-reg.html', form=form)
+    return render_template('register/guardian-reg.html', form=form)
 
 @app.route('/guardian/<int:guardian_id>')
 def show_guardian_detail(guardian_id):
