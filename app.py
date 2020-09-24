@@ -217,4 +217,8 @@ def show_iep(student_id, iep_id):
     teacher_id = student.teacher.id
     if teacher_id == session[CURR_USER_KEY]:
         iep = IEP.query.get(iep_id)
-        goals = Goal.query.filter_by(iep_id=iep.id)
+        goals = Goal.query.filter_by(iep_id=iep.id).all()
+        return render_template('iep-detail.html', student=student, iep=iep, goals=goals)
+    else:
+        flash('You are not authorized to view this page.')
+        return redirect(f'/teacher/{teacher_id}')
