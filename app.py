@@ -139,11 +139,6 @@ def show_guardian_detail(guardian_id):
     guardian = Guardian.query.get(guardian_id)
     return render_template('guardian/guardian-detail.html', guardian=guardian)
 
-@app.route('/student/id')
-def show_student_detail():
-    # flash('Welcome {Parent Name}', 'good')
-    return render_template('student-detail.html')
-
 @app.route('/teacher/<int:teacher_id>/add-student', methods=["GET", "POST"])
 def add_student(teacher_id):
     teacher = Teacher.query.get(teacher_id)
@@ -194,4 +189,4 @@ def add_family(teacher_id):
 @app.route('/student/<int:student_id>')
 def show_student_detail(student_id):
     student = Student.query.get(student_id)
-    return render_template()
+    return render_template('/student/student-detail.html', student=student)
