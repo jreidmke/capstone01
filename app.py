@@ -141,28 +141,31 @@ def show_guardian_detail(guardian_id):
 
 @app.route('/teacher/<int:teacher_id>/add-student', methods=["GET", "POST"])
 def add_student(teacher_id):
-    teacher = Teacher.query.get(teacher_id)
-    form = StudentRegisterForm()
-    if form.validate_on_submit():
-        student = Student(
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
-            dob=form.dob.data,
-            grade=form.grade.data,
-            teacher_id=teacher_id,
-            dis_area=form.dis_area.data
-        )
+    if teacher_id == session[CURR_USER_KEY]:
+        form = StudentRegisterForm()
 
-        db.session.add(student)
-        db.session.commit()
+        if form.validate_on_submit():
+            student = Student(
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                dob=form.dob.data,
+                grade=form.grade.data,
+                teacher_id=teacher_id,
+                dis_area=form.dis_area.data
+            )
 
-        return redirect(f'/teacher/{teacher_id}')
+            db.session.add(student)
+            db.session.commit()
 
-    return render_template('teacher/add-student.html', form=form, teacher=teacher)
+            return redirect(f'/teacher/{teacher_id}')
+        else:
+            return render_template('teacher/add-student.html', form=form)
+    else:
+        flash("You are not authorized to view this account", "bad")
+        return redirect('/')
 
 @app.route('/teacher/<int:teacher_id>/add-family', methods=["GET", "POST"])
 def add_family(teacher_id):
-    teacher = Teacher.query.get(teacher_id)
     form = FamilyForm()
     if form.validate_on_submit():
         guardian = Guardian.query.filter_by(
@@ -181,10 +184,10 @@ def add_family(teacher_id):
         db.session.add(family)
         db.session.commit()
         flash(f"Family created! Guardian {guardian.first_name} {guardian.last_name}, Student: {student.first_name} {student.last_name}!", "good")
-        return redirect(f'/teacher/{teacher_id}')
+        return redirect(f'/teacher/{session[CURR_USER_KEY]}')
 
 
-    return render_template('/teacher/add-family.html', form=form, teacher=teacher)
+    return render_template('/teacher/add-family.html', form=form)
 
 @app.route('/student/<int:student_id>')
 def show_student_detail(student_id):
