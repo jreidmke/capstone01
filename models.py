@@ -102,7 +102,7 @@ class Student(db.Model):
 
     teacher = db.relationship('Teacher')
 
-    # guardians = db.relationship('Family', cascade='all, delete', backref='student')
+    guardians = db.relationship('Family', cascade='all, delete', backref='student')
 
 class Guardian(db.Model):
     """Guardian model"""
@@ -123,6 +123,8 @@ class Guardian(db.Model):
         nullable=False)
     password = db.Column(db.String,
         nullable=False)
+
+    students = db.relationship('Family', cascade='all, delete', backref='guardian')
 
     @classmethod
     def register(cls, first_name, last_name, relation, username, password):
@@ -150,8 +152,6 @@ class Guardian(db.Model):
             return guardian
         else:
             return False
-
-    # students = db.relationship('Family', cascade='all, delete', backref='guardian')
 
 class Family(db.Model):
     """Family model"""

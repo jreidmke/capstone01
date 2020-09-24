@@ -85,7 +85,11 @@ def teacher_reg():
 def show_teacher_detail(teacher_id):
     teacher = Teacher.query.get(teacher_id)
     students = Student.query.filter_by(teacher_id=teacher_id).all()
-    return render_template('teacher/teacher-detail.html', teacher=teacher, students=students)
+    if session[CURR_USER_KEY] == teacher.id:
+        return render_template('teacher/teacher-detail.html', teacher=teacher, students=students)
+    else:
+        flash("You are not authorized to see this account", "bad")
+        return redirect ('/teacher/login')
 
 # Guardian Routing. Register and Login.
 
@@ -186,3 +190,8 @@ def add_family(teacher_id):
 
 
     return render_template('/teacher/add-family.html', form=form, teacher=teacher)
+
+@app.route('/student/<int:student_id>')
+def show_student_detail(student_id):
+    student = Student.query.get(student_id)
+    return render_template()
