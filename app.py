@@ -5,7 +5,7 @@ from models import db, connect_db, School, Teacher, Student, Guardian, Family, I
 from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm
 from datetime import date
 
-CURR_USER_KEY = "curr_user"
+CURR_USER_KEY = "current_user"
 
 app = Flask(__name__)
 
@@ -177,6 +177,8 @@ def add_family(teacher_id):
             guardian_id=guardian.id,
             student_id=student.id
         )
+
+
         db.session.add(family)
         db.session.commit()
         flash(f"Family created! Guardian {guardian.first_name} {guardian.last_name}, Student: {student.first_name} {student.last_name}!", "good")
