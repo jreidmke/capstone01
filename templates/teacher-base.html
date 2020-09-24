@@ -1,29 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>{% block title %} {% endblock %}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block nav %}
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="/">IEP+</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link" href="/teacher/{{session[CURR_USER_KEY]}}">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/teacher/{{session['current_user']}}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/teacher/{{session[CURR_USER_KEY]}}/add-student">Add Student</a>
+              <a class="nav-link" href="/teacher/{{session['current_user']}}/add-student">Add Student</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/teacher/{{session[CURR_USER_KEY]}}/add-family">Add Family</a>
+              <a class="nav-link" href="/teacher/{{session['current_user']}}/add-family">Add Family</a>
             </li>
             <li class="nav-item">
               <a class="nav-link disabled" href="#">Disabled</a>
@@ -32,15 +25,8 @@
         </div>
       </nav>
 
-      <h1>{{session[CURR_USER_KEY]}}</h1>
-
-      {% for category, message in get_flashed_messages(with_categories=True) %}
-      <div class="{{ category }} text-center">{{ message }}</div>
-      {% endfor %}
+    {% endblock %}
 
     {% block content %}
 
     {% endblock %}
-
-</body>
-</html>
