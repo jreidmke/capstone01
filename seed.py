@@ -14,32 +14,27 @@ db.session.add(sch2)
 db.session.add(sch3)
 db.session.commit()
 
-tch1 = Teacher(first_name='Jess',
+Teacher.register(first_name='Jess',
     last_name='Christensen',
     title='K4-2nd Sped',
     school_id=1,
     username='jessc',
     password='packers123'
     )
-tch2 = Teacher(first_name='Tanya',
+Teacher.register(first_name='Tanya',
     last_name='Scoma',
     title='3rd-5th Sped',
     school_id = 2,
     username='tanyas',
     password='badgers123'
     )
-tch3 = Teacher(first_name='Sally',
+Teacher.register(first_name='Sally',
     last_name='Krueger',
     title='Middle School Sped',
     school_id=3,
     username='sallyk',
     password='zach123'
     )
-
-db.session.add(tch1)
-db.session.add(tch2)
-db.session.add(tch3)
-db.session.commit()
 
 stu1 = Student(first_name='Fake',
     last_name='Kid JR.',
@@ -92,36 +87,30 @@ db.session.add(stu5)
 db.session.add(stu6)
 db.session.commit()
 
-par1 = Guardian(first_name='Fake',
+par1 = Guardian.register(first_name='Fake',
     last_name='Mom',
     relation='Mother',
     username='fakemom123',
     password='iamfake'
     )
-par2 = Guardian(first_name='Fake',
+par2 = Guardian.register(first_name='Fake',
     last_name='Dad',
     relation='Father',
     username='fakedad123',
     password='iamfake'
     )
-par3 = Guardian(first_name='Fake',
+par3 = Guardian.register(first_name='Fake',
     last_name='Aunt',
     relation='Aunt',
     username='fakeaunt123',
     password='iamfake'
     )
-par4 = Guardian(first_name='Fake',
+par4 = Guardian.register(first_name='Fake',
     last_name='Brother',
     relation='Brother',
     username='fakebro',
     password='iamfake'
     )
-
-db.session.add(par1)
-db.session.add(par2)
-db.session.add(par3)
-db.session.add(par4)
-db.session.commit()
 
 fam1 = Family(student_id=1, guardian_id=1)
 fam2 = Family(student_id=1, guardian_id=2)
