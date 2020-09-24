@@ -25,6 +25,12 @@ def login(user):
 
     session[CURR_USER_KEY] = user.id
 
+def logout():
+    """Logout user."""
+
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+
 
 # Landing page.
 
@@ -180,10 +186,9 @@ def add_family(teacher_id):
             student_id=student.id
         )
 
-
         db.session.add(family)
         db.session.commit()
-        flash(f"Family created! Guardian {guardian.first_name} {guardian.last_name}, Student: {student.first_name} {student.last_name}!", "good")
+        flash(f"Family created! Guardian: {guardian.first_name} {guardian.last_name}, Student: {student.first_name} {student.last_name}!", "good")
         return redirect(f'/teacher/{session[CURR_USER_KEY]}')
 
 
@@ -193,3 +198,8 @@ def add_family(teacher_id):
 def show_student_detail(student_id):
     student = Student.query.get(student_id)
     return render_template('/student/student-detail.html', student=student)
+
+@app.route('/logout')
+def logout_user():
+    logout()
+    return redirect('/')
