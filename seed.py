@@ -14,12 +14,12 @@ db.session.add(sch2)
 db.session.add(sch3)
 db.session.commit()
 
-Teacher.register(first_name='Jess',
-    last_name='Christensen',
+Teacher.register(first_name='James',
+    last_name='Reid',
     title='K4-2nd Sped',
     school_id=1,
-    username='jessc',
-    password='packers123'
+    username='jreidmke',
+    password='123'
     )
 Teacher.register(first_name='Tanya',
     last_name='Scoma',
