@@ -4,4 +4,34 @@
 
 {% block content %}
 
+{{iep}}
+
+{% for goal in goals %}
+
+{{goal.data}}
+
+{% endfor %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <h3 class="text-center">IEP Date: {{iep.date}}</h3>
+
+            <div class="card m-2" style="width: 20rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{student.first_name + ' ' + student.last_name + ', '}} Grade {{student.grade}}</h5>
+                    <p class="card-text">DOB: {{student.dob}} || Disability Area: {{student.dis_area}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for goal in goals %}
+                        <li class="list-group-item"><b>{{goal.goal}}</b></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
 {% endblock %}

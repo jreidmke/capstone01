@@ -200,6 +200,8 @@ class Goal(db.Model):
     standard = db.Column(db.String,
         nullable=False)
 
+    data = db.relationship('ClassworkData')
+
 class ClassworkData(db.Model):
     """Classwork Data model. For each goal, we will store the baseline
     (data pertaining to student's present level for goal), level of attainment
