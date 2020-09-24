@@ -57,6 +57,11 @@ def teacher_login():
 
     return render_template("login/teacher-login.html", form=form)
 
+@app.route('/logout')
+def logout_user():
+    logout()
+    return redirect('/')
+
 @app.route('/teacher/register', methods=["GET", "POST"])
 def teacher_reg():
     form = TeacherRegisterForm()
@@ -197,9 +202,19 @@ def add_family(teacher_id):
 @app.route('/student/<int:student_id>')
 def show_student_detail(student_id):
     student = Student.query.get(student_id)
-    return render_template('/student/student-detail.html', student=student)
+    teacher_id = student.teacher.id
+    if teacher_id == session[CURR_USER_KEY]:
+        guardians = Family.query.filter_by(student_id=student_id).all()
+        ieps = IEP.query.filter_by(student_id=student_id).all()
+        return render_template('/student/student-detail.html', student=student, guardians=guardians, ieps=ieps)
+    else:
+        flash('You are not authorized to view this page.')
+        return redirect(f'/teacher/{teacher_id}')
 
-@app.route('/logout')
-def logout_user():
-    logout()
-    return redirect('/')
+@app.route('/student/<int:student_id>/iep/<int:iep_id>')
+def show_iep(student_id, iep_id):
+    student = Student.query.get(student_id)
+    teacher_id = student.teacher.id
+    if teacher_id == session[CURR_USER_KEY]:
+        iep = IEP.query.get(iep_id)
+        goals = Goal.query.filter_by(iep_id=iep.id)

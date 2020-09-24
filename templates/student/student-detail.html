@@ -1,15 +1,51 @@
 {% extends 'teacher-base.html' %}
 
-{% block title %} {{student.first_name}} {% endblock %}
+{% block title %} {{student.first_name}} {{student.last_name}}'s Profile {% endblock %}
 
 {% block content %}
 
-{{student.guardians}}
+<div class="container mt-3">
+    <div class="row">
 
-{% for guardian in student.guardians %}
+        <div class="col-3">
+            <h3 class="text-center">Student Details</h3>
+                <div class="card m-2" style="width: 20rem;">
+                    <img class="card-img-top" src="../../static/images/anon-profile.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{student.first_name + ' ' + student.last_name + ', '}} Grade {{student.grade}}</h5>
+                        <p class="card-text">DOB: {{student.dob}} || Disability Area: {{student.dis_area}}</p>
+                    </div>
+                </div>
+        </div>
 
-{{guardian}}
+        <div class="col-1"></div>
 
-{% endfor %}
+        <div class="col-3">
+            <h3 class="text-center">Family Details</h3>
+            <div class="card" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    {% for guardian in guardians %}
+                        <li class="list-group-item"><b>{{guardian.guardian.first_name}} {{guardian.guardian.last_name}},</b> {{guardian.guardian.relation}}</li>
+                    {% endfor %}
+                </ul>
+              </div>
+        </div>
+
+        <div class="col-1"></div>
+
+        <div class="col-3">
+            <h3 class="text-center">IEPs</h3>
+            <div class="card" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    {% for iep in ieps %}
+                        <li class="list-group-item"><b><a href="/student/{{student.id}}/iep/{{iep.id}}">{{iep.date}}</a></b></li>
+                    {% endfor %}
+                        <li class="list-group-item"><b><a href="/student/{{student.id}}/new-iep">Create New IEP+</a></b></li>
+                </ul>
+              </div>
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}

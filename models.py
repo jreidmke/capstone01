@@ -104,6 +104,20 @@ class Student(db.Model):
 
     guardians = db.relationship('Family', cascade='all, delete', backref='student')
 
+class Family(db.Model):
+    """Family model"""
+
+    __tablename__ = 'families'
+
+    guardian_id = db.Column(db.Integer,
+        db.ForeignKey('guardians.id', ondelete="cascade"),
+        primary_key=True,
+        nullable=False)
+    student_id = db.Column(db.Integer,
+        db.ForeignKey('students.id', ondelete="cascade"),
+        primary_key=True,
+        nullable=False)
+
 class Guardian(db.Model):
     """Guardian model"""
 
@@ -152,20 +166,6 @@ class Guardian(db.Model):
             return guardian
         else:
             return False
-
-class Family(db.Model):
-    """Family model"""
-
-    __tablename__ = 'families'
-
-    guardian_id = db.Column(db.Integer,
-        db.ForeignKey('guardians.id', ondelete="cascade"),
-        primary_key=True,
-        nullable=False)
-    student_id = db.Column(db.Integer,
-        db.ForeignKey('students.id', ondelete="cascade"),
-        primary_key=True,
-        nullable=False)
 
 class IEP(db.Model):
     """IEP model"""
