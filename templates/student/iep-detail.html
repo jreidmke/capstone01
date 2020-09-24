@@ -4,14 +4,6 @@
 
 {% block content %}
 
-{{iep}}
-
-{% for goal in goals %}
-
-{{goal.data}}
-
-{% endfor %}
-
 <div class="container">
     <div class="row">
         <div class="col-4">
@@ -20,18 +12,34 @@
             <div class="card m-2" style="width: 20rem;">
                 <div class="card-body">
                     <h5 class="card-title">{{student.first_name + ' ' + student.last_name + ', '}} Grade {{student.grade}}</h5>
-                    <p class="card-text">DOB: {{student.dob}} || Disability Area: {{student.dis_area}}</p>
+                    <p class="card-text">IEP Written By: {{student.teacher.first_name}} {{student.teacher.last_name}}</p>
                 </div>
+
                 <ul class="list-group list-group-flush">
                     {% for goal in goals %}
-                        <li class="list-group-item"><b>{{goal.goal}}</b></li>
+                        <div class="btn-group dropright">
+                            <button type="button" class="btn btn-secondary dropdown-toggle my-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{goal.goal}}
+                            </button>
+                            <div class="dropdown-menu">
+                                <ul class="list-group list-group-flush">
+                                    {% for data in goal.data %}
+                                        <li class="list-group-item text-danger"><b>Baseline: </b>{{data.baseline}}</li>
+                                        <li class="list-group-item text-info"><b>Current: </b>{{data.current}}</li>
+                                        <li class="list-group-item text-success"><b>Attainment: </b>{{data.attainment}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                          </div>
                     {% endfor %}
                 </ul>
-            </div>
 
+            </div>
 
         </div>
     </div>
 </div>
+
+
 
 {% endblock %}
