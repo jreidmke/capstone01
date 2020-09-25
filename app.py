@@ -2,10 +2,11 @@ from flask import Flask, request, session, render_template, redirect, flash, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
-from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm
 from datetime import date
 
 CURR_USER_KEY = "current_user"
+CURR_IEP_KEY = "current_iep"
 
 app = Flask(__name__)
 
@@ -210,6 +211,28 @@ def show_student_detail(student_id):
     else:
         flash('You are not authorized to view this page.')
         return redirect(f'/teacher/{teacher_id}')
+
+
+# IEP Routing
+
+@app.route('/student/<int:student_id>/iep')
+def create_iep(student_id):
+    iep = IEP(
+        student_id=student_id,
+        teacher_id=session[CURR_USER_KEY]
+    )
+    db.session.add(iep)
+    db.session.commit()
+    session[CURR_IEP_KEY] = iep.id
+    return redirect(f'/iep/{iep.id}/goal')
+
+@app.route('/iep/<int:iep_id>/goal')
+def create_goal(iep_id):
+    iep = IEP.query.get(iep_id)
+    g_form = GoalForm()
+    d_form = ClassworkDataForm()
+
+    return render_template('goal.html', g_form=g_form, d_form=d_form)
 
 @app.route('/student/<int:student_id>/iep/<int:iep_id>')
 def show_iep(student_id, iep_id):
