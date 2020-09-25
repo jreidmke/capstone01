@@ -229,9 +229,10 @@ def create_iep(student_id):
 @app.route('/iep/<int:iep_id>/goal', methods=["GET", "POST"])
 def create_goal(iep_id):
     iep = IEP.query.get(iep_id)
-    student_id = iep.student_id
+    student = Student.query.get(iep.student_id)
     g_form = GoalForm()
     d_form = ClassworkDataForm()
+    goals = Goal.query.filter_by(iep_id=iep.id).all()
 
     if g_form.validate_on_submit() and d_form.validate_on_submit():
         goal = Goal(
@@ -249,10 +250,10 @@ def create_goal(iep_id):
         )
         db.session.add(data)
         db.session.commit()
-        flash(f"Goal created! {goal.goal}. {data.baseline}. {data.attainment}.")
+        flash(f"Goal created! {goal.goal}. {data.baseline}. {data.attainment}.", "good")
         return redirect(f'/iep/{iep.id}/goal')
 
-    return render_template('/student/goal.html', g_form=g_form, d_form=d_form, student_id=student_id, iep_id=iep.id)
+    return render_template('/student/goal.html', g_form=g_form, d_form=d_form, student=student, iep_id=iep.id, goals=goals)
 
 @app.route('/student/<int:student_id>/iep/<int:iep_id>')
 def show_iep(student_id, iep_id):

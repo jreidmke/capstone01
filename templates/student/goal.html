@@ -6,41 +6,74 @@
 
 
 <div class="container mt-3">
-    <div class="col-6">
+    <div class="row">
+        <div class="col-6">
 
-        <h1 class="text-center">Add New Goal</h1>
+            <h1 class="text-center">Add New Goal</h1>
 
-        <form method="POST" id="user_form">
-            {{ g_form.hidden_tag() }}
+            <form method="POST" id="user_form">
+                {{ g_form.hidden_tag() }}
 
-            {% for field in g_form if field.widget.input_type != 'hidden' %}
+                {% for field in g_form if field.widget.input_type != 'hidden' %}
 
-            {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-
-
-            {{ field(placeholder=field.label.text, class="form-control") }}
-            {% endfor %}
+                {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+                {% endfor %}
 
 
-            {{ g_form.hidden_tag() }}
-
-            {% for field in d_form if field.widget.input_type != 'hidden' %}
-
-            {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
+                {{ field(placeholder=field.label.text, class="form-control") }}
+                {% endfor %}
 
 
-            {{ field(placeholder=field.label.text, class="form-control") }}
-            {% endfor %}
+                {{ g_form.hidden_tag() }}
 
-            <button class="btn btn-primary btn-lg btn-block ml-2">Add Goal</button>
-        </form>
-        <form action="/student/{{student_id}}/iep/{{iep_id}}">
-            <button class="btn btn-danger btn-lg btn-block mt-2 ml-2">Commit Goals and Data</button>
-        </form>
+                {% for field in d_form if field.widget.input_type != 'hidden' %}
+
+                {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+
+
+                {{ field(placeholder=field.label.text, class="form-control") }}
+                {% endfor %}
+
+                <button class="btn btn-primary btn-lg btn-block ml-2">Add Goal</button>
+            </form>
+            <form action="/student/{{student_id}}/iep/{{iep_id}}">
+                <button class="btn btn-danger btn-lg btn-block mt-2 ml-2">Commit Goals and Data</button>
+            </form>
+        </div>
+
+        <div class="col-4">
+            <div class="card m-2" style="width: 40rem;">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/student/{{student.id}}">{{student.first_name + ' ' + student.last_name + ', '}}</a> Grade {{student.grade}}</h5>
+                    <p class="card-text">IEP Written By: {{student.teacher.first_name}} {{student.teacher.last_name}}</p>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                    {% for goal in goals %}
+                        <div class="btn-group dropright">
+                            <button type="button" class="btn btn-secondary dropdown-toggle my-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{goal.goal}}
+                            </button>
+                            <div class="dropdown-menu">
+                                <ul class="list-group list-group-flush">
+                                    {% for data in goal.data %}
+                                        <li class="list-group-item text-danger"><b>Baseline: </b>{{data.baseline}}</li>
+                                        <li class="list-group-item text-info"><b>Current: </b>{{data.current}}</li>
+                                        <li class="list-group-item text-success"><b>Attainment: </b>{{data.attainment}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                          </div>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+
+
     </div>
 </div>
 
