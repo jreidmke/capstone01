@@ -11,7 +11,7 @@
 
             <div class="card m-2" style="width: 40rem;">
                 <div class="card-body">
-                    <h5 class="card-title">{{student.first_name + ' ' + student.last_name + ', '}} Grade {{student.grade}}</h5>
+                    <h5 class="card-title"><a href="/student/{{student.id}}">{{student.first_name + ' ' + student.last_name + ', '}}</a> Grade {{student.grade}}</h5>
                     <p class="card-text">IEP Written By: {{student.teacher.first_name}} {{student.teacher.last_name}}</p>
                 </div>
 
