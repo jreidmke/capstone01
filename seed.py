@@ -181,9 +181,9 @@ cd8 = ClassworkData(goal_id=8, baseline='2 mins on task', current='3 1/2 mins on
 cd9 = ClassworkData(goal_id=9, baseline='20% of work', current='15% of work', attainment='60% of work')
 cd10 = ClassworkData(goal_id=10, baseline='20% of work', current='15% of work', attainment='60% of work')
 
-cd11 = ClassworkData(goal_id=1, baseline='2 mins on task', current='3 1/2 mins on task', attainment='7 mins on task')
-cd12 = ClassworkData(goal_id=2, baseline='20% completion', current='35% completion', attainment='60% completion')
-cd13 = ClassworkData(goal_id=3, baseline='3/20 pgs read', current='3/20 pgs read', attainment='20 pgs read')
+cd11 = ClassworkData(goal_id=11, baseline='2 mins on task', current='3 1/2 mins on task', attainment='7 mins on task')
+cd12 = ClassworkData(goal_id=12, baseline='20% completion', current='35% completion', attainment='60% completion')
+cd13 = ClassworkData(goal_id=13, baseline='3/20 pgs read', current='3/20 pgs read', attainment='20 pgs read')
 
 db.session.add(cd1)
 db.session.add(cd2)

@@ -49,3 +49,15 @@ class FamilyForm(FlaskForm):
     guardian_username = StringField('Guardian Username', validators=[DataRequired()])
     student_first_name = StringField('Student First Name', validators=[DataRequired()])
     student_last_name = StringField('Student Last Name', validators=[DataRequired()])
+
+class GoalForm(FlaskForm):
+    """Form for teachers to create student goals"""
+
+    goal = StringField('Goal Text', validators=[DataRequired()])
+    standard = StringField('Related Standard', validators=[DataRequired()])
+
+class ClassworkDataForm(FlaskForm):
+    """Form for teachers to create data related to student goals"""
+
+    baseline = StringField('Baseline Data', validators=[DataRequired()])
+    attainment = StringField('Level of Attainment', validators=[DataRequired()])
