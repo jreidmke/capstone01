@@ -229,10 +229,11 @@ def create_iep(student_id):
 @app.route('/iep/<int:iep_id>/goal')
 def create_goal(iep_id):
     iep = IEP.query.get(iep_id)
+    student_id = iep.student_id
     g_form = GoalForm()
     d_form = ClassworkDataForm()
 
-    return render_template('goal.html', g_form=g_form, d_form=d_form)
+    return render_template('/student/goal.html', g_form=g_form, d_form=d_form, student_id=student_id, iep_id=iep.id)
 
 @app.route('/student/<int:student_id>/iep/<int:iep_id>')
 def show_iep(student_id, iep_id):

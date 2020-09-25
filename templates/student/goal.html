@@ -8,23 +8,43 @@
 <div class="container mt-3">
     <div class="col-6">
 
-        <h1 class="text-center">Add New Student</h1>
+        <h1 class="text-center">Add New Goal</h1>
 
         <form method="POST" id="user_form">
-            {{ form.hidden_tag() }}
+            {{ g_form.hidden_tag() }}
 
-            {% for field in form if field.widget.input_type != 'hidden' %}
+            {% for field in g_form if field.widget.input_type != 'hidden' %}
 
             {% for error in field.errors %}
             <span class="text-danger">{{ error }}</span>
             {% endfor %}
 
+
             {{ field(placeholder=field.label.text, class="form-control") }}
             {% endfor %}
 
-            <button class="btn btn-primary btn-lg btn-block ml-2">Add Student</button>
+
+            {{ g_form.hidden_tag() }}
+
+            {% for field in d_form if field.widget.input_type != 'hidden' %}
+
+            {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+
+
+            {{ field(placeholder=field.label.text, class="form-control") }}
+            {% endfor %}
+
+            <button class="btn btn-primary btn-lg btn-block ml-2">Add Goal</button>
+        </form>
+        <form action="/student/{{student_id}}/iep/{{iep_id}}">
+            <button class="btn btn-danger btn-lg btn-block mt-2">Commit Goals and Data</button>
         </form>
     </div>
 </div>
+
+
+
 
 {% endblock %}
