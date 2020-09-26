@@ -2,7 +2,7 @@ from flask import Flask, request, session, render_template, redirect, flash, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
-from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm
 from datetime import date
 
 CURR_USER_KEY = "current_user"
@@ -204,10 +204,12 @@ def add_family(teacher_id):
 def show_student_detail(student_id):
     student = Student.query.get(student_id)
     teacher_id = student.teacher.id
+    latest_iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
+    goals = Goal.query.filter_by(iep_id=latest_iep.id).all()
     if teacher_id == session[CURR_USER_KEY]:
         guardians = Family.query.filter_by(student_id=student_id).all()
         ieps = IEP.query.filter_by(student_id=student_id).all()
-        return render_template('/student/student-detail.html', student=student, guardians=guardians, ieps=ieps)
+        return render_template('/student/student-detail.html', student=student, guardians=guardians, ieps=ieps, latest_iep=latest_iep, goals=goals)
     else:
         flash('You are not authorized to view this page.')
         return redirect(f'/teacher/{teacher_id}')
@@ -266,3 +268,11 @@ def show_iep(student_id, iep_id):
     else:
         flash('You are not authorized to view this page.')
         return redirect(f'/teacher/{teacher_id}')
+
+@app.route('/iep/<int:iep_id>/goal/?goal_id=<int:goal_id>')
+def set_current_data(iep_id, goal_id):
+    form = CurrentClassworkDataForm()
+    iep = IEP.query.get(iep_id)
+    goal = Goal.query.get(goal_id)
+    data = ClassworkData.query.filter_by(goal_id=goal.id).first()
+    return render_template('/student/current-data.html', goal=goal, data=data)
