@@ -269,10 +269,19 @@ def show_iep(student_id, iep_id):
         flash('You are not authorized to view this page.')
         return redirect(f'/teacher/{teacher_id}')
 
-@app.route('/iep/<int:iep_id>/goal/?goal_id=<int:goal_id>')
-def set_current_data(iep_id, goal_id):
+@app.route('/goal/<int:goal_id>', methods=["GET", "POST"])
+def set_current_data(goal_id):
     form = CurrentClassworkDataForm()
-    iep = IEP.query.get(iep_id)
     goal = Goal.query.get(goal_id)
+    iep = IEP.query.get(goal.iep_id)
     data = ClassworkData.query.filter_by(goal_id=goal.id).first()
-    return render_template('/student/current-data.html', goal=goal, data=data)
+
+    if form.validate_on_submit():
+        data.current = form.current.data
+
+        db.session.add(data)
+        db.session.commit()
+        flash(f'Data updated for goal: {goal.goal}')
+        return redirect(f'/student/{iep.student_id}/iep/{iep.id}')
+
+    return render_template('/student/current-data.html', goal=goal, data=data, form=form)
