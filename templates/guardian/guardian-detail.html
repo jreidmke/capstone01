@@ -4,22 +4,28 @@
 
 {% block content %}
 
-{{guardian.first_name + guardian.last_name}}
+<div class="container mt-3">
+    <div class="row">
+        {% for student in guardian.students %}
+            <!-- student cards -->
+            <div class="col-3 mx-2">
+                    <div class="card m-2" style="width: 15rem;">
+                        <img class="card-img-top" src="../../static/images/anon-profile.png" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{student.student.first_name + ' ' + student.student.last_name + ', '}} Grade {{student.grade}}</h5>
+                            <p class="card-text">DOB: {{student.student.dob}} || Disability Area: {{student.student.dis_area}}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% for iep in student.student.ieps %}
+                            <li class="list-group-item"><b><a href="/student/{{student.student.id}}/iep/{{iep.id}}">{{iep.date}}</a></b></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
 
-{{guardian.relation}}
+        {% endfor %}
+    </div>
+</div>
 
-{{guardian.username}}
-
-{{guardian.password}}
-
-{{guardian.students}}
-
-{% for family in guardian.students %}
-
-<h1>{{family.student.first_name}}</h1>
-
-<h1>{{family.student.ieps}}</h1>
-
-{% endfor %}
 
 {% endblock %}
