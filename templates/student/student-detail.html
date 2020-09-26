@@ -45,6 +45,17 @@
               </div>
         </div>
 
+        <form action="/iep/{{latest_iep.id}}/goal/">
+            <label for="goal_id">Select Goal to Set Current Data</label>
+            <select name="goal_id" id="goal_id">
+                {% for goal in goals %}
+                <option value="{{goal.id}}">{{goal.goal}}</option>
+                {% endfor %}
+            </select>
+            <button>Go</button>
+        </form>
+
+
 
     </div>
 </div>
