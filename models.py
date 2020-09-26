@@ -200,7 +200,7 @@ class Goal(db.Model):
     standard = db.Column(db.String,
         nullable=False)
 
-    data = db.relationship('ClassworkData')
+    data = db.relationship('ClassworkData', backref='goal')
 
 class ClassworkData(db.Model):
     """Classwork Data model. For each goal, we will store the baseline
