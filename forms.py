@@ -61,3 +61,8 @@ class ClassworkDataForm(FlaskForm):
 
     baseline = StringField('Baseline Data', validators=[DataRequired()])
     attainment = StringField('Level of Attainment', validators=[DataRequired()])
+
+class CurrentClassworkDataForm(FlaskForm):
+    """Form to set current level for goal"""
+
+    current = StringField('Current Level', validators=[DataRequired()])
