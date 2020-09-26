@@ -24,6 +24,7 @@
                             <div class="dropdown-menu">
                                 <ul class="list-group list-group-flush">
                                     {% for data in goal.data %}
+                                        <li class="list-group-item text-secondary"><b>Last Updated: </b>{{data.current_data_date}}</li>
                                         <li class="list-group-item text-danger"><b>Baseline: </b>{{data.baseline}}</li>
                                         <li class="list-group-item text-info"><b>Current: </b>{{data.current}}</li>
                                         <li class="list-group-item text-success"><b>Attainment: </b>{{data.attainment}}</li>
