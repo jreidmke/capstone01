@@ -47,7 +47,7 @@
 
         <form action="/iep/{{latest_iep.id}}/goal/">
             <label for="goal_id">Select Goal to Set Current Data</label>
-            <select name="goal_id" id="goal_id">
+            <select>
                 {% for goal in goals %}
                 <option value="{{goal.id}}">{{goal.goal}}</option>
                 {% endfor %}
@@ -55,6 +55,24 @@
             <button>Go</button>
         </form>
 
+        <div class="row">
+            {% for goal in goals %}
+                <div class="col-4 text-center">
+                    <div class="card mt-3" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{goal.goal}}</h5>
+                                {% for data in goal.data %}
+                            <h6 class="card-subtitle mb-2 text-muted">{{data.current_data_date}}</h6>
+                            <p class="card-text text-danger">Baseline: {{data.baseline}}</p>
+                            <p class="card-text text-info">Current: {{data.current}}</p>
+                            <p class="card-text text-success">Level of Attainment: {{data.attainment}}</p>
+                                {% endfor %}
+                            <a href="/goal/{{goal.id}}" class="card-link">Edit Current Data<a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
 
     </div>
