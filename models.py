@@ -217,5 +217,7 @@ class ClassworkData(db.Model):
         nullable=False)
     current = db.Column(db.String,
         nullable=False)
+    current_data_date = db.Column(db.Date,
+        default=datetime.date.today())
     attainment = db.Column(db.String,
         nullable=False)
