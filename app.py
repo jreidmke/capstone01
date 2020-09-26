@@ -103,54 +103,6 @@ def show_teacher_detail(teacher_id):
         flash("You are not authorized to see this account", "bad")
         return redirect ('/teacher/login')
 
-# Guardian Routing. Register and Login.
-
-@app.route('/guardian/login', methods=["GET", "POST"])
-def guardian_login():
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        guardian = Guardian.authenticate(form.username.data,
-            form.password.data)
-
-        if guardian:
-            login(guardian)
-            flash(f"Welcome {guardian.first_name}!", "good")
-            return redirect(f"/guardian/{guardian.id}")
-
-        flash("Invalid username or password", "bad")
-
-    return render_template("login/guardian-login.html", form=form)
-
-@app.route('/guardian/register', methods=["GET", "POST"])
-def show_guardian_reg():
-    form = GuardianRegisterForm()
-
-    if form.validate_on_submit():
-        try:
-            guardian = Guardian.register(
-                first_name=form.first_name.data,
-                last_name=form.last_name.data,
-                relation=form.relation.data,
-                username=form.username.data,
-                password=form.password.data
-            )
-
-        except IntegrityError:
-            flash("Username already taken", 'bad')
-            return render_template('register/teacher-reg.html', form=form)
-
-        login(guardian)
-
-        return redirect(f'/guardian/{guardian.id}')
-
-    return render_template('register/guardian-reg.html', form=form)
-
-@app.route('/guardian/<int:guardian_id>')
-def show_guardian_detail(guardian_id):
-    guardian = Guardian.query.get(guardian_id)
-    return render_template('guardian/guardian-detail.html', guardian=guardian)
-
 @app.route('/teacher/<int:teacher_id>/add-student', methods=["GET", "POST"])
 def add_student(teacher_id):
     if teacher_id == session[CURR_USER_KEY]:
@@ -199,6 +151,55 @@ def add_family(teacher_id):
 
 
     return render_template('/teacher/add-family.html', form=form)
+
+# Guardian Routing. Register and Login.
+
+@app.route('/guardian/login', methods=["GET", "POST"])
+def guardian_login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        guardian = Guardian.authenticate(form.username.data,
+            form.password.data)
+
+        if guardian:
+            login(guardian)
+            flash(f"Welcome {guardian.first_name}!", "good")
+            return redirect(f"/guardian/{guardian.id}")
+
+        flash("Invalid username or password", "bad")
+
+    return render_template("login/guardian-login.html", form=form)
+
+@app.route('/guardian/register', methods=["GET", "POST"])
+def show_guardian_reg():
+    form = GuardianRegisterForm()
+
+    if form.validate_on_submit():
+        try:
+            guardian = Guardian.register(
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                relation=form.relation.data,
+                username=form.username.data,
+                password=form.password.data
+            )
+
+        except IntegrityError:
+            flash("Username already taken", 'bad')
+            return render_template('register/teacher-reg.html', form=form)
+
+        login(guardian)
+
+        return redirect(f'/guardian/{guardian.id}')
+
+    return render_template('register/guardian-reg.html', form=form)
+
+@app.route('/guardian/<int:guardian_id>')
+def show_guardian_detail(guardian_id):
+    guardian = Guardian.query.get(guardian_id)
+    family = Family.query.filter_by(guardian_id=guardian.id).all()
+    return render_template('guardian/guardian-detail.html', guardian=guardian)
 
 @app.route('/student/<int:student_id>')
 def show_student_detail(student_id):

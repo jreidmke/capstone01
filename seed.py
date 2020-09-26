@@ -113,7 +113,7 @@ par4 = Guardian.register(first_name='Fake',
     )
 
 fam1 = Family(student_id=1, guardian_id=1)
-fam2 = Family(student_id=1, guardian_id=2)
+fam2 = Family(student_id=2, guardian_id=1)
 fam3 = Family(student_id=2, guardian_id=3)
 fam4 = Family(student_id=3, guardian_id=4)
 

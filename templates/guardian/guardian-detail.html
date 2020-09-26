@@ -12,4 +12,12 @@
 
 {{guardian.password}}
 
+{{guardian.students}}
+
+{% for family in guardian.students %}
+
+<h1>{{family.student.first_name}}</h1>
+
+{% endfor %}
+
 {% endblock %}
