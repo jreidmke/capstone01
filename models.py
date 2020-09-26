@@ -103,6 +103,7 @@ class Student(db.Model):
     teacher = db.relationship('Teacher')
 
     guardians = db.relationship('Family', cascade='all, delete', backref='student')
+    ieps = db.relationship('IEP', backref='student')
 
 class Family(db.Model):
     """Family model"""
