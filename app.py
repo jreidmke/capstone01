@@ -211,7 +211,7 @@ def show_student_detail(student_id):
     teacher_id = student.teacher.id
     latest_iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
     goals = Goal.query.filter_by(iep_id=latest_iep.id).all()
-    if teacher_id == session[CURR_USER_KEY]:
+    if teacher_id == session[CURR_USER_KEY] and session[IS_TEACHER] == True:
         guardians = Family.query.filter_by(student_id=student_id).all()
         ieps = IEP.query.filter_by(student_id=student_id).all()
         return render_template('/student/student-detail.html', student=student, guardians=guardians, ieps=ieps, latest_iep=latest_iep, goals=goals)
@@ -265,7 +265,10 @@ def create_goal(iep_id):
 def show_iep(student_id, iep_id):
     student = Student.query.get(student_id)
     teacher_id = student.teacher.id
-    if teacher_id == session[CURR_USER_KEY]:
+    guardians = Family.query.filter_by(student_id=student_id).all()
+    guardians = [guardian.guardian_id for guardian in guardians]
+
+    if (session[IS_TEACHER] == False and session[CURR_USER_KEY] in guardians) or (session[IS_TEACHER] == True and session[CURR_USER_KEY] == teacher_id):
         iep = IEP.query.get(iep_id)
         goals = Goal.query.filter_by(iep_id=iep.id).all()
         return render_template('student/iep-detail.html', student=student, iep=iep, goals=goals)
