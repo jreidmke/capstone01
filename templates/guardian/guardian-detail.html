@@ -13,7 +13,8 @@
                         <img class="card-img-top" src="../../static/images/anon-profile.png" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">{{student.student.first_name + ' ' + student.student.last_name + ', '}} Grade {{student.student.grade}}</h5>
-                            <p class="card-text">DOB: {{student.student.dob}} || Disability Area: {{student.student.dis_area}}</p>
+                            <p class="card-text text-secondary">DOB: {{student.student.dob}}</p>
+                            <p class="card-text text-secondary">Disability Area: {{student.student.dis_area}}</p>
                         </div>
                         <ul class="list-group list-group-flush">
                             {% for iep in student.student.ieps|reverse %}

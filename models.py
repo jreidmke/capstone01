@@ -48,6 +48,8 @@ class Teacher(db.Model):
         nullable=False)
     password = db.Column(db.String,
         nullable=False)
+    is_teacher = db.Column(db.Boolean,
+        default=True)
 
     school = db.relationship('School')
 
@@ -138,6 +140,8 @@ class Guardian(db.Model):
         nullable=False)
     password = db.Column(db.String,
         nullable=False)
+    is_teacher = db.Column(db.Boolean,
+        default=False)
 
     students = db.relationship('Family', cascade='all, delete', backref='guardian')
 
