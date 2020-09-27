@@ -12,15 +12,14 @@
                     <div class="card m-2" style="width: 15rem;">
                         <img class="card-img-top" src="../../static/images/anon-profile.png" alt="Card image cap">
                         <div class="card-body">
-                            <h5 class="card-title">{{student.student.first_name + ' ' + student.student.last_name + ', '}} Grade {{student.grade}}</h5>
+                            <h5 class="card-title">{{student.student.first_name + ' ' + student.student.last_name + ', '}} Grade {{student.student.grade}}</h5>
                             <p class="card-text">DOB: {{student.student.dob}} || Disability Area: {{student.student.dis_area}}</p>
                         </div>
                         <ul class="list-group list-group-flush">
                             {% for iep in student.student.ieps|reverse %}
 
 
-                                    <li class="list-group-item"><b><a href="/student/{{student.student.id}}/iep/{{iep.id}}">{{iep.date}}</a></b></li>
-
+                                    <li class="list-group-item" id="guardian-iep-li"><b><a href="/student/{{student.student.id}}/iep/{{iep.id}}">{{iep.date}}</a></b> || <small>by {{iep.teacher.first_name}} {{iep.teacher.last_name}}</small></li>
 
                             {% endfor %}
                         </ul>

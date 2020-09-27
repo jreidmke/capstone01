@@ -185,6 +185,8 @@ class IEP(db.Model):
         db.ForeignKey('teachers.id', ondelete='cascade'),
         nullable=False)
 
+    teacher = db.relationship("Teacher", primaryjoin="IEP.teacher_id == Teacher.id")
+
 class Goal(db.Model):
     """Goal Model"""
 
