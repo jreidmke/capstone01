@@ -152,9 +152,9 @@ def add_family(teacher_id):
             db.session.commit()
             flash(f"Family created! Guardian: {guardian.first_name} {guardian.last_name}, Student: {student.first_name} {student.last_name}!", "good")
             return redirect(f'/teacher/{session[CURR_USER_KEY]}')
-
-
-        return render_template('/teacher/add-family.html', form=form)
+        students = Student.query.all()
+        guardians = Guardian.query.all()
+        return render_template('/teacher/add-family.html', form=form, students=students, guardians=guardians)
 
 # Guardian Routing. Register and Login.
 
