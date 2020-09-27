@@ -16,8 +16,12 @@
                             <p class="card-text">DOB: {{student.student.dob}} || Disability Area: {{student.student.dis_area}}</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            {% for iep in student.student.ieps %}
-                            <li class="list-group-item"><b><a href="/student/{{student.student.id}}/iep/{{iep.id}}">{{iep.date}}</a></b></li>
+                            {% for iep in student.student.ieps|reverse %}
+
+
+                                    <li class="list-group-item"><b><a href="/student/{{student.student.id}}/iep/{{iep.id}}">{{iep.date}}</a></b></li>
+
+
                             {% endfor %}
                         </ul>
                     </div>
