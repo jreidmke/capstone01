@@ -6,7 +6,7 @@ from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentR
 from datetime import date
 
 CURR_USER_KEY = "current_user"
-CURR_IEP_KEY = "current_iep"
+IS_TEACHER = "is_teacher"
 
 app = Flask(__name__)
 
@@ -23,14 +23,17 @@ toolbar = DebugToolbarExtension(app)
 
 def login(user):
     """Log in user."""
-
     session[CURR_USER_KEY] = user.id
+    session[IS_TEACHER] = user.is_teacher
 
 def logout():
     """Logout user."""
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
+
+    if IS_TEACHER in session:
+        del session[IS_TEACHER]
 
 
 # Landing page.
@@ -97,7 +100,7 @@ def teacher_reg():
 def show_teacher_detail(teacher_id):
     teacher = Teacher.query.get(teacher_id)
     students = Student.query.filter_by(teacher_id=teacher_id).all()
-    if session[CURR_USER_KEY] == teacher.id:
+    if session[CURR_USER_KEY] == teacher.id and session[IS_TEACHER] == True:
         return render_template('teacher/teacher-detail.html', teacher=teacher, students=students)
     else:
         flash("You are not authorized to see this account", "bad")
@@ -105,7 +108,7 @@ def show_teacher_detail(teacher_id):
 
 @app.route('/teacher/<int:teacher_id>/add-student', methods=["GET", "POST"])
 def add_student(teacher_id):
-    if teacher_id == session[CURR_USER_KEY]:
+    if teacher_id == session[CURR_USER_KEY] and session[IS_TEACHER] == True:
         form = StudentRegisterForm()
 
         if form.validate_on_submit():
@@ -130,27 +133,28 @@ def add_student(teacher_id):
 
 @app.route('/teacher/<int:teacher_id>/add-family', methods=["GET", "POST"])
 def add_family(teacher_id):
-    form = FamilyForm()
-    if form.validate_on_submit():
-        guardian = Guardian.query.filter_by(
-            first_name=form.guardian_first_name.data,
-            last_name=form.guardian_last_name.data,
-            username=form.guardian_username.data).first()
-        student = Student.query.filter_by(
-            first_name=form.student_first_name.data,
-            last_name=form.student_last_name.data).first()
-        family = Family(
-            guardian_id=guardian.id,
-            student_id=student.id
-        )
+    if teacher_id == session[CURR_USER_KEY] and session[IS_TEACHER] == True:
+        form = FamilyForm()
+        if form.validate_on_submit():
+            guardian = Guardian.query.filter_by(
+                first_name=form.guardian_first_name.data,
+                last_name=form.guardian_last_name.data,
+                username=form.guardian_username.data).first()
+            student = Student.query.filter_by(
+                first_name=form.student_first_name.data,
+                last_name=form.student_last_name.data).first()
+            family = Family(
+                guardian_id=guardian.id,
+                student_id=student.id
+            )
 
-        db.session.add(family)
-        db.session.commit()
-        flash(f"Family created! Guardian: {guardian.first_name} {guardian.last_name}, Student: {student.first_name} {student.last_name}!", "good")
-        return redirect(f'/teacher/{session[CURR_USER_KEY]}')
+            db.session.add(family)
+            db.session.commit()
+            flash(f"Family created! Guardian: {guardian.first_name} {guardian.last_name}, Student: {student.first_name} {student.last_name}!", "good")
+            return redirect(f'/teacher/{session[CURR_USER_KEY]}')
 
 
-    return render_template('/teacher/add-family.html', form=form)
+        return render_template('/teacher/add-family.html', form=form)
 
 # Guardian Routing. Register and Login.
 
@@ -226,7 +230,6 @@ def create_iep(student_id):
     )
     db.session.add(iep)
     db.session.commit()
-    session[CURR_IEP_KEY] = iep.id
     return redirect(f'/iep/{iep.id}/goal')
 
 @app.route('/iep/<int:iep_id>/goal', methods=["GET", "POST"])
