@@ -6,24 +6,40 @@
 
 
 <div class="container mt-3">
-    <div class="col-6">
+    <div class="row">
 
-        <h1 class="text-center">Add Family</h1>
+        <div class="col-4 mt-2">
+            <h1 class="text-center">Add Family</h1>
+            <form method="POST" id="user_form">
+                {{ form.hidden_tag() }}
+                {% for field in form if field.widget.input_type != 'hidden' %}
+                {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+                {{ field(placeholder=field.label.text, class="form-control") }}
+                {% endfor %}
+                <button class="btn btn-primary btn-lg btn-block ml-2">Add Family</button>
+            </form>
+        </div>
+        <div class="col-6">
+            <h1><label for="guardian-info">Guardian Information</label></h1>
+            <select name="guardian-info" id="guardian-info" class="form-control">
+                <option>--Guardian Data--</option>
+                {% for guardian in guardians %}
+                <option>{{guardian.first_name}} {{guardian.last_name}} <p class="text-secondary">({{guardian.username}})</p></option>
+                {% endfor %}
+            </select>
+            <div class="mt-5">
+                <h1><label for="student-info">Student Information</label></h1>
+                <select name="student-info" id="student-info" class="form-control">
+                    <option>--Student Data--</option>
+                    {% for student in students %}
+                    <option>{{student.first_name}} {{student.last_name}}</p></option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-        <form method="POST" id="user_form">
-            {{ form.hidden_tag() }}
-
-            {% for field in form if field.widget.input_type != 'hidden' %}
-
-            {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-
-            {{ field(placeholder=field.label.text, class="form-control") }}
-            {% endfor %}
-
-            <button class="btn btn-primary btn-lg btn-block ml-2">Add Family</button>
-        </form>
     </div>
 </div>
 
