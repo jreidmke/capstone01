@@ -54,7 +54,7 @@ class GoalForm(FlaskForm):
     """Form for teachers to create student goals"""
 
     goal = StringField('Goal Text', validators=[DataRequired()])
-    standard = StringField('Related Standard', validators=[DataRequired()])
+    subject = SelectField('Subject', validators=[DataRequired()])
 
 class ClassworkDataForm(FlaskForm):
     """Form for teachers to create data related to student goals"""
@@ -70,3 +70,7 @@ class CurrentClassworkDataForm(FlaskForm):
 class StandardSetDataForm(FlaskForm):
 
     standard_set = SelectField('Standard Set', validators=[DataRequired()])
+
+class StandardDataForm(FlaskForm):
+
+    standard = SelectField('Standard', validators=[DataRequired()])
