@@ -207,6 +207,8 @@ class Goal(db.Model):
         nullable=False)
     goal = db.Column(db.String,
         nullable=False)
+    subject = db.Column(db.String,
+        nullable=False)
 
     data = db.relationship('ClassworkData', backref='goal')
     standard = db.relationship('GoalStandard', backref='goal')
