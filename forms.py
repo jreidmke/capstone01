@@ -66,3 +66,7 @@ class CurrentClassworkDataForm(FlaskForm):
     """Form to set current level for goal"""
 
     current = StringField('Current Level', validators=[DataRequired()])
+
+class StandardSetDataForm(FlaskForm):
+
+    standard_set = SelectField('Standard Set', validators=[DataRequired()])
