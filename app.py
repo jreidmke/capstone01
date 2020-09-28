@@ -22,9 +22,18 @@ db.create_all()
 
 toolbar = DebugToolbarExtension(app)
 
-# def get_state_codes():
-#     jur = requests.get('http://commonstandardsproject.com/api/v1/jurisdictions/').json()
-#     states = {k:v for (k, v) in jur.items() if v == "state"}
+def get_state_codes():
+    states = requests.get('http://commonstandardsproject.com/api/v1/jurisdictions/').json()['data']
+    data = [standards for standards in states if standards["type"] == "state"]
+    return data
+
+def get_standards_list(state_code):
+    standards = requests.get(f'http://commonstandardsproject.com/api/v1/jurisdictions/{state_code}').json()['data']['standardSets']
+    return standards
+
+def get_grade_level_standards(grade, standards):
+    grade_level_standards = [standard for standard in standards if grade in standard['educationLevels']]
+    return grade_level_standards
 
 def login(user):
     """Log in user."""
@@ -47,10 +56,10 @@ def logout():
 
 @app.route('/')
 def show_landing_page():
-    jur = requests.get('http://commonstandardsproject.com/api/v1/jurisdictions/').json()
-    states = jur['data']
-    states = [standards for standards in states if standards["type"] == "state"]
-    return render_template('landing-page.html', states=states)
+    states = get_state_codes()
+    standards = get_standards_list(states[0]['id'])
+    grade_level_standards = get_grade_level_standards('01', standards)
+    return render_template('landing-page.html', states=states, standards=standards, grade_level_standards=grade_level_standards)
 
 # Teacher Routing. Register and Login.
 
