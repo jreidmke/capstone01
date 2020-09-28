@@ -252,8 +252,7 @@ def show_student_detail(student_id):
 
     student = Student.query.get(student_id)
 
-    standards = get_standards_list(student.teacher.school.state_code)
-    grade_level_standards = get_grade_level_standard_sets(append_zero_convert_to_string(student.grade), standards)
+
 
     teacher_id = student.teacher.id
     if teacher_id == session[CURR_USER_KEY] and session[IS_TEACHER] == True:
@@ -261,7 +260,7 @@ def show_student_detail(student_id):
         goals = Goal.query.filter_by(iep_id=latest_iep.id).all()
         guardians = Family.query.filter_by(student_id=student_id).all()
         ieps = IEP.query.filter_by(student_id=student_id).all()
-        return render_template('/student/student-detail.html', student=student, guardians=guardians, ieps=ieps, latest_iep=latest_iep, goals=goals, grade_level_standards=grade_level_standards)
+        return render_template('/student/student-detail.html', student=student, guardians=guardians, ieps=ieps, latest_iep=latest_iep, goals=goals)
     else:
         flash('You are not authorized to view this page.')
         return redirect(f'/teacher/{teacher_id}')
@@ -279,7 +278,7 @@ def create_iep(student_id):
     db.session.commit()
     return redirect(f'/iep/{iep.id}/goal')
 
-@app.route('/iep/<int:iep_id>/goal', methods=["GET", "POST"])
+@app.route('/iep/<int:iep_id>/goal/', methods=["GET", "POST"])
 def create_goal(iep_id):
     iep = IEP.query.get(iep_id)
     student = Student.query.get(iep.student_id)
@@ -291,7 +290,6 @@ def create_goal(iep_id):
         goal = Goal(
             iep_id=iep.id,
             goal=g_form.goal.data,
-            standard=g_form.standard.data
         )
         db.session.add(goal)
         db.session.commit()
@@ -303,10 +301,28 @@ def create_goal(iep_id):
         )
         db.session.add(data)
         db.session.commit()
-        flash(f"Goal created! {goal.goal}. {data.baseline}. {data.attainment}.", "good")
-        return redirect(f'/iep/{iep.id}/goal')
+        flash(f"Goal created! {goal.goal}. {data.baseline}. {data.attainment}. Select Standard Set", "good")
+        return redirect(f'/goal/{goal.id}/standard_set')
 
     return render_template('/student/goal.html', g_form=g_form, d_form=d_form, student=student, iep_id=iep.id, goals=goals)
+
+@app.route('/goal/<int:goal_id>/standard_set')
+def select_standard_set(goal_id):
+    goal = Goal.query.get(goal_id)
+    iep = IEP.query.get(goal.iep_id)
+    student = Student.query.get(iep.student_id)
+    standards = get_standards_list(student.teacher.school.state_code)
+    grade_level_standards = get_grade_level_standard_sets(append_zero_convert_to_string(student.grade), standards)
+
+# class UserDetails(Form):
+#     group_id = SelectField(u'Group', coerce=int)
+
+# def edit_user(request, id):
+#     user = User.query.get(id)
+#     form = UserDetails(request.POST, obj=user)
+#     form.group_id.choices = [(g.id, g.name) for g in Group.query.order_by('name')]
+
+    return render_template('/student/standard-set.html', grade_level_standards=grade_level_standards)
 
 @app.route('/student/<int:student_id>/iep/<int:iep_id>')
 def show_iep(student_id, iep_id):
@@ -323,7 +339,7 @@ def show_iep(student_id, iep_id):
         flash('You are not authorized to view this page.')
         return redirect(f'/teacher/{teacher_id}')
 
-@app.route('/goal/<int:goal_id>', methods=["GET", "POST"])
+@app.route('/goal/<int:goal_id>/data', methods=["GET", "POST"])
 def set_current_data(goal_id):
     form = CurrentClassworkDataForm()
     goal = Goal.query.get(goal_id)
