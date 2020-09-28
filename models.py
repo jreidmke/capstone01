@@ -207,14 +207,14 @@ class Goal(db.Model):
         nullable=False)
     goal = db.Column(db.String,
         nullable=False)
-    # standard_set_title = db.Column(db.String,
-    #     nullable=False)
-    # standard_set_id = db.Column(db.String,
-    #     nullable=False)
-    # standard_text = db.Column(db.String,
-    #     nullable=False)
-    # standard_text_id = db.Column(db.String,
-    #     nullable=False)
+    standard_set_title = db.Column(db.String,
+        nullable=False)
+    standard_set_id = db.Column(db.String,
+        nullable=False)
+    standard_text = db.Column(db.String,
+        nullable=False)
+    standard_id = db.Column(db.String,
+        nullable=False)
 
     data = db.relationship('ClassworkData', backref='goal')
 
