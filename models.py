@@ -28,7 +28,8 @@ class School(db.Model):
         nullable=False)
     state_code = db.Column(db.String,
         nullable=False)
-
+    standards_code = db.Column(db.String,
+        nullable=False)
 
 class Teacher(db.Model):
     """Teacher model"""
