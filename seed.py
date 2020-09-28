@@ -1,6 +1,6 @@
 from app import db
 from datetime import date
-from models import School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
+from models import School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData, GoalStandard
 
 db.drop_all()
 db.create_all()
@@ -153,44 +153,17 @@ db.session.add(iep7)
 db.session.commit()
 
 goal1 = Goal(iep_id=1,
-    goal='Pay attention for 10 minutes',
-    standard_set_title='Illinois Learning Standards for Social/Emotional Development',
-    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D2406942_grades-01-02-03-k',
-    standard_text='Demonstrate appropriate social and classroom behavior.',
-    standard_id='A39873C0DFE5013184DB68A86D17958E')
+    goal='Pay attention for 10 minutes')
 goal2 = Goal(iep_id=1,
-    goal='Correct display table data',
-    standard_set_title='Illinois Learning Standards for Mathematics',
-    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D10001EB_grades-01-02-03-k',
-    standard_text='Collect, organize and describe data using pictures, tallies, tables, charts or bar graphs.',
-    standard_id='9D9C07D0DFE50131799768A86D17958E')
+    goal='Correct display table data')
 goal3 = Goal(iep_id=1,
-    goal='Categorize words to demonstrate knowledge',
-    standard_set_title='Illinois Learning Standards Incorporating the Common Core English Language Arts',
-    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D2418244_grade-01',
-    standard_text='Sort words into categories (e.g., colors, clothing) to gain a sense of the concepts the categories represent.',
-    standard_id='9F522BB0DFE501317CCA68A86D17958E')
-
+    goal='Categorize words to demonstrate knowledge')
 goal4 = Goal(iep_id=7,
-    goal='Identify and follow classroom rules',
-    standard_set_title='Illinois Learning Standards Incorporating the Common Core English Language Arts',
-    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D2406942_grades-01-02-03-k',
-    standard_text='Identify social norms and safety considerations that guide behavior.',
-    standard_id='A39A6A00DFE5013184E268A86D17958E')
+    goal='Identify and follow classroom rules')
 goal5 = Goal(iep_id=7,
-    goal='Display knowledge of symmetry.',
-    standard_set_title='Illinois Learning Standards for Mathematics',
-    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D10001EB_grades-01-02-03-k',
-    standard_text='Identify lines of symmetry in simple figures and construct symmetrical figures using various concrete materials.',
-    standard_id='9DA559F0DFE5013179A368A86D17958E')
-
+    goal='Display knowledge of symmetry.')
 goal6 = Goal(iep_id=7,
-    goal='Do the work',
-    standard_set_title="Illinois Learning Standards Incorporating the Common Core English Language Arts",
-    standard_set_id="549159D28465455FB144F5B67F3ACDFF_D2418244_grade-02",
-    standard_text='Draw evidence from literary or informational texts to support analysis, reflection, and research.',
-    standard_id='9FB25AE0DFE501317D1768A86D17958E')
-
+    goal='Do the work')
 
 # goal4 = Goal(iep_id=2, goal='Read a whole book', standard='Reading')
 # goal5 = Goal(iep_id=2, goal='Finish math problems', standard='Math')
@@ -219,6 +192,44 @@ db.session.add(goal6)
 # db.session.add(goal12)
 # db.session.add(goal13)
 db.session.commit()
+
+gs1 = GoalStandard(goal_id=goal1.id,
+    standard_set_title='Illinois Learning Standards for Social/Emotional Development',
+    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D2406942_grades-01-02-03-k',
+    standard_text='Demonstrate appropriate social and classroom behavior.',
+    standard_id='A39873C0DFE5013184DB68A86D17958E')
+gs2 = GoalStandard(goal_id=goal2.id,
+    standard_set_title='Illinois Learning Standards for Mathematics',
+    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D10001EB_grades-01-02-03-k',
+    standard_text='Collect, organize and describe data using pictures, tallies, tables, charts or bar graphs.',
+    standard_id='9D9C07D0DFE50131799768A86D17958E')
+gs3 = GoalStandard(goal_id=goal3.id,
+    standard_set_title='Illinois Learning Standards Incorporating the Common Core English Language Arts',
+    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D2418244_grade-01',
+    standard_text='Sort words into categories (e.g., colors, clothing) to gain a sense of the concepts the categories represent.',
+    standard_id='9F522BB0DFE501317CCA68A86D17958E')
+gs4 = GoalStandard(goal_id=goal4.id,
+    standard_set_title='Illinois Learning Standards Incorporating the Common Core English Language Arts',
+    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D2406942_grades-01-02-03-k',
+    standard_text='Identify social norms and safety considerations that guide behavior.',
+    standard_id='A39A6A00DFE5013184E268A86D17958E')
+gs5 = GoalStandard(goal_id=goal5.id,
+    standard_set_title='Illinois Learning Standards for Mathematics',
+    standard_set_id='549159D28465455FB144F5B67F3ACDFF_D10001EB_grades-01-02-03-k',
+    standard_text='Identify lines of symmetry in simple figures and construct symmetrical figures using various concrete materials.',
+    standard_id='9DA559F0DFE5013179A368A86D17958E')
+gs6 = GoalStandard(goal_id=goal6.id,
+    standard_set_title="Illinois Learning Standards Incorporating the Common Core English Language Arts",
+    standard_set_id="549159D28465455FB144F5B67F3ACDFF_D2418244_grade-02",
+    standard_text='Draw evidence from literary or informational texts to support analysis, reflection, and research.',
+    standard_id='9FB25AE0DFE501317D1768A86D17958E')
+
+db.session.add(gs1)
+db.session.add(gs2)
+db.session.add(gs3)
+db.session.add(gs4)
+db.session.add(gs5)
+db.session.add(gs6)
 
 cd1 = ClassworkData(goal_id=1, baseline='2 mins on task', current='3 1/2 mins on task', attainment='7 mins on task')
 cd2 = ClassworkData(goal_id=2, baseline='20% completion', current='35% completion', attainment='60% completion')
