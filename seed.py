@@ -5,9 +5,15 @@ from models import School, Teacher, Student, Guardian, Family, IEP, Goal, Classw
 db.drop_all()
 db.create_all()
 
-sch1 = School(name='Chicago')
-sch2 = School(name='Geneva')
-sch3 = School(name='Milwaukee')
+sch1 = School(name='Chicago',
+    state='Illinois',
+    state_code='549159D28465455FB144F5B67F3ACDFF')
+sch2 = School(name='Minneapolis',
+    state='Minnesota',
+    state_code="B632FB4B1B83445AA8DB46DC3F079D19")
+sch3 = School(name='Milwaukee',
+    state='Wisconsin',
+    state_code='745124D969E9491C9FC33D3235259386')
 
 db.session.add(sch1)
 db.session.add(sch2)

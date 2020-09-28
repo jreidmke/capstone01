@@ -24,6 +24,10 @@ class School(db.Model):
         autoincrement=True)
     name = db.Column(db.String,
         nullable=False)
+    state = db.Column(db.String,
+        nullable=False)
+    state_code = db.Column(db.String,
+        nullable=False)
 
 
 class Teacher(db.Model):
