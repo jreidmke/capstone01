@@ -3,8 +3,9 @@ import requests
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
-from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetDataForm
 from datetime import date
+# from wtforms_components import SelectWidget
 
 CURR_USER_KEY = "current_user"
 IS_TEACHER = "is_teacher"
@@ -31,13 +32,17 @@ def get_standards_list(state_code):
     standards = requests.get(f'http://commonstandardsproject.com/api/v1/jurisdictions/{state_code}').json()['data']['standardSets']
     return standards
 
+def get_subject_list(standards):
+    subject_list = [standard_subject["subject"] for standard_subject in standards]
+    return subject_list
+
 def get_grade_level_standard_sets(grade, standards):
     """Returns all State Grade Level Standard Sets per grade in arguemnt
     Organized by subject."""
 
     grade_level_standards = [standard for standard in standards if grade in standard['educationLevels']]
 
-    standards_subject = [standard_subject["subject"] for standard_subject in grade_level_standards]
+    standards_subject = get_subject_list(grade_level_standards)
 
     standard_sets_by_subject = {}
 
@@ -313,6 +318,9 @@ def select_standard_set(goal_id):
     student = Student.query.get(iep.student_id)
     standards = get_standards_list(student.teacher.school.state_code)
     grade_level_standards = get_grade_level_standard_sets(append_zero_convert_to_string(student.grade), standards)
+    form = StandardSetDataForm()
+    form.standard_set.choices = grade_level_standards
+
 
 # class UserDetails(Form):
 #     group_id = SelectField(u'Group', coerce=int)
@@ -322,7 +330,7 @@ def select_standard_set(goal_id):
 #     form = UserDetails(request.POST, obj=user)
 #     form.group_id.choices = [(g.id, g.name) for g in Group.query.order_by('name')]
 
-    return render_template('/student/standard-set.html', grade_level_standards=grade_level_standards)
+    return render_template('/student/standard-set.html', form=form)
 
 @app.route('/student/<int:student_id>/iep/<int:iep_id>')
 def show_iep(student_id, iep_id):
