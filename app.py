@@ -73,15 +73,16 @@ def logout():
     if IS_TEACHER in session:
         del session[IS_TEACHER]
 
+    # states = get_state_codes()
+    # standards = get_standards_list("549159D28465455FB144F5B67F3ACDFF")
+    # grade_level_standards = get_grade_level_standard_sets(append_zero_convert_to_string(2), standards)
+
 
 # Landing page.
 
 @app.route('/')
 def show_landing_page():
-    states = get_state_codes()
-    standards = get_standards_list(states[0]['id'])
-    grade_level_standards = get_grade_level_standard_sets(append_zero_convert_to_string(2), standards)
-    return render_template('landing-page.html', states=states, standards=standards, grade_level_standards=grade_level_standards)
+    return render_template('landing-page.html')
 
 # Teacher Routing. Register and Login.
 
@@ -248,14 +249,19 @@ def show_guardian_detail(guardian_id):
 
 @app.route('/student/<int:student_id>')
 def show_student_detail(student_id):
+
     student = Student.query.get(student_id)
+
+    standards = get_standards_list(student.teacher.school.state_code)
+    grade_level_standards = get_grade_level_standard_sets(append_zero_convert_to_string(student.grade), standards)
+
     teacher_id = student.teacher.id
-    latest_iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
-    goals = Goal.query.filter_by(iep_id=latest_iep.id).all()
     if teacher_id == session[CURR_USER_KEY] and session[IS_TEACHER] == True:
+        latest_iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
+        goals = Goal.query.filter_by(iep_id=latest_iep.id).all()
         guardians = Family.query.filter_by(student_id=student_id).all()
         ieps = IEP.query.filter_by(student_id=student_id).all()
-        return render_template('/student/student-detail.html', student=student, guardians=guardians, ieps=ieps, latest_iep=latest_iep, goals=goals)
+        return render_template('/student/student-detail.html', student=student, guardians=guardians, ieps=ieps, latest_iep=latest_iep, goals=goals, grade_level_standards=grade_level_standards)
     else:
         flash('You are not authorized to view this page.')
         return redirect(f'/teacher/{teacher_id}')
