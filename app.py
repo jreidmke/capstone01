@@ -1,4 +1,5 @@
-from flask import Flask, request, session, render_template, redirect, flash, jsonify
+from flask import Flask, request, session, render_template, redirect, flash
+import requests
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
@@ -21,6 +22,10 @@ db.create_all()
 
 toolbar = DebugToolbarExtension(app)
 
+# def get_state_codes():
+#     jur = requests.get('http://commonstandardsproject.com/api/v1/jurisdictions/').json()
+#     states = {k:v for (k, v) in jur.items() if v == "state"}
+
 def login(user):
     """Log in user."""
     session[CURR_USER_KEY] = user.id
@@ -38,9 +43,14 @@ def logout():
 
 # Landing page.
 
+
+
 @app.route('/')
 def show_landing_page():
-    return render_template('landing-page.html')
+    jur = requests.get('http://commonstandardsproject.com/api/v1/jurisdictions/').json()
+    states = jur['data']
+    states = [standards for standards in states if standards["type"] == "state"]
+    return render_template('landing-page.html', states=states)
 
 # Teacher Routing. Register and Login.
 
