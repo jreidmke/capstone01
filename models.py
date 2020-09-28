@@ -211,10 +211,8 @@ class Goal(db.Model):
     data = db.relationship('ClassworkData', backref='goal')
     standard = db.relationship('GoalStandard', backref='goal')
 
-class GoalStandard(db.Model):
-    """Goal Standard Model. Each goal will be matched to a standard represented by
-    The standard set title and id as well as ths standard text and standard id"""
-
+class GoalStandardSet(db.Model):
+    """Here the teacher selects the standard set from which their standard originates"""
     goal_id = db.Column(db.Integer,
         db.ForeignKey('goals.id', ondelete='cascade'),
         primary_key=True)
@@ -222,6 +220,12 @@ class GoalStandard(db.Model):
         nullable=False)
     standard_set_id = db.Column(db.String,
         nullable=False)
+
+class GoalStandard(db.Model):
+    """Here the teacher selects the standard the student's goal is attached to"""
+    goal_id = db.Column(db.Integer,
+        db.ForeignKey('goals.id', ondelete='cascade'),
+        primary_key=True)
     standard_text = db.Column(db.String,
         nullable=False)
     standard_id = db.Column(db.String,
