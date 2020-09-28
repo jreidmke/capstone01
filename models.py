@@ -207,6 +207,17 @@ class Goal(db.Model):
         nullable=False)
     goal = db.Column(db.String,
         nullable=False)
+
+    data = db.relationship('ClassworkData', backref='goal')
+    standard = db.relationship('GoalStandard', backref='goal')
+
+class GoalStandard(db.Model):
+    """Goal Standard Model. Each goal will be matched to a standard represented by
+    The standard set title and id as well as ths standard text and standard id"""
+
+    goal_id = db.Column(db.Integer,
+        db.ForeignKey('goals.id', ondelete='cascade'),
+        primary_key=True)
     standard_set_title = db.Column(db.String,
         nullable=False)
     standard_set_id = db.Column(db.String,
@@ -215,8 +226,6 @@ class Goal(db.Model):
         nullable=False)
     standard_id = db.Column(db.String,
         nullable=False)
-
-    data = db.relationship('ClassworkData', backref='goal')
 
 class ClassworkData(db.Model):
     """Classwork Data model. For each goal, we will store the baseline
