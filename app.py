@@ -2,9 +2,11 @@ from flask import Flask, request, session, render_template, redirect, flash
 import requests
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
-from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData
-from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetDataForm
+from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData, GoalStandard, GoalStandardSet
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetDataForm, StandardDataForm
 from datetime import date
+from operator import itemgetter
+
 # from wtforms_components import SelectWidget
 
 CURR_USER_KEY = "current_user"
@@ -42,19 +44,37 @@ def get_grade_level_standard_sets(grade, standards):
 
     grade_level_standards = [standard for standard in standards if grade in standard['educationLevels']]
 
-    standards_subject = get_subject_list(grade_level_standards)
+    return grade_level_standards
 
+def sort_sets_by_subject(subject_list, standard_set_list):
     standard_sets_by_subject = {}
 
-    for subject in standards_subject:
+    for subject in subject_list:
         sub_list = []
-        for obj in grade_level_standards:
+        for obj in standard_set_list:
             if subject == obj["subject"]:
-                sub_list.append({obj["document"]["title"]: obj["id"]})
+                sub_list.append({'title': obj["document"]["title"],
+                    'id': obj["id"]})
 
             standard_sets_by_subject[subject] = sub_list
 
     return standard_sets_by_subject
+
+
+
+def get_standards(standard_set_code):
+    standards = requests.get(f'http://commonstandardsproject.com/api/v1/standard_sets/{standard_set_code}').json()['data']['standards']
+
+    standard_id_list = standards.keys()
+
+    des = []
+    for id in standard_id_list:
+        des.append(standards[id]['description'])
+
+    standards_dict = dict(zip(des, standard_id_list))
+
+    return standards_dict
+
 
 def append_zero_convert_to_string(int):
     """The API formats single digit grades as strings with appended 0's (ex. 02, 07, 08)"""
@@ -257,8 +277,6 @@ def show_student_detail(student_id):
 
     student = Student.query.get(student_id)
 
-
-
     teacher_id = student.teacher.id
     if teacher_id == session[CURR_USER_KEY] and session[IS_TEACHER] == True:
         latest_iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
@@ -287,14 +305,23 @@ def create_iep(student_id):
 def create_goal(iep_id):
     iep = IEP.query.get(iep_id)
     student = Student.query.get(iep.student_id)
+
+    standards = get_standards_list(student.teacher.school.state_code)
+    grade_level = get_grade_level_standard_sets(append_zero_convert_to_string(student.grade), standards)
+    subject_list = get_subject_list(grade_level)
+
     g_form = GoalForm()
     d_form = ClassworkDataForm()
+
+    g_form.subject.choices = subject_list
+
     goals = Goal.query.filter_by(iep_id=iep.id).all()
 
     if g_form.validate_on_submit() and d_form.validate_on_submit():
         goal = Goal(
             iep_id=iep.id,
             goal=g_form.goal.data,
+            subject=g_form.subject.data
         )
         db.session.add(goal)
         db.session.commit()
@@ -311,26 +338,67 @@ def create_goal(iep_id):
 
     return render_template('/student/goal.html', g_form=g_form, d_form=d_form, student=student, iep_id=iep.id, goals=goals)
 
-@app.route('/goal/<int:goal_id>/standard_set')
+@app.route('/goal/<int:goal_id>/standard_set', methods=["GET", "POST"])
 def select_standard_set(goal_id):
+
     goal = Goal.query.get(goal_id)
     iep = IEP.query.get(goal.iep_id)
     student = Student.query.get(iep.student_id)
     standards = get_standards_list(student.teacher.school.state_code)
-    grade_level_standards = get_grade_level_standard_sets(append_zero_convert_to_string(student.grade), standards)
+    grade_level = get_grade_level_standard_sets(append_zero_convert_to_string(student.grade), standards)
+    subject_list = get_subject_list(grade_level)
+
+    standard_set = sort_sets_by_subject(subject_list, grade_level)
+
+    selected_standard_set = standard_set[goal.subject]
+
+    selected_standard_titles = [standard_set['title'] for standard_set in selected_standard_set]
+
     form = StandardSetDataForm()
-    form.standard_set.choices = grade_level_standards
+
+    form.standard_set.choices=selected_standard_titles
+
+    if form.validate_on_submit():
+        standard_set_id = ''
+        for standard in selected_standard_set:
+            if standard['title'] == form.standard_set.data:
+                standard_set_id = standard['id']
 
 
-# class UserDetails(Form):
-#     group_id = SelectField(u'Group', coerce=int)
-
-# def edit_user(request, id):
-#     user = User.query.get(id)
-#     form = UserDetails(request.POST, obj=user)
-#     form.group_id.choices = [(g.id, g.name) for g in Group.query.order_by('name')]
+        standard_set = GoalStandardSet(goal_id=goal.id,
+            standard_set_title = form.standard_set.data,
+            standard_set_id = standard_set_id)
+        db.session.add(standard_set)
+        db.session.commit()
+        flash(f'Standard Set Selected. {standard_set.standard_set_title}!', 'good')
+        return redirect(f'/goal/{goal.id}/standard')
 
     return render_template('/student/standard-set.html', form=form)
+
+@app.route('/goal/<int:goal_id>/standard', methods=["POST", "GET"])
+def select_standard(goal_id):
+    goal = Goal.query.get(goal_id)
+    standard_set = GoalStandardSet.query.get(goal.id)
+
+    standards = get_standards(standard_set.standard_set_id)
+
+    standard_text = list(standards.keys())
+
+    form = StandardDataForm()
+
+    form.standard.choices = standard_text
+
+    if form.validate_on_submit():
+        standard = GoalStandard(goal_id=goal.id,
+            standard_text=form.standard.data,
+            standard_id=standards[form.standard.data])
+
+        db.session.add(standard)
+        db.session.commit()
+        flash(f'{standard.standard_text}')
+        return redirect('/')
+
+    return render_template('/student/select-standard.html', form=form)
 
 @app.route('/student/<int:student_id>/iep/<int:iep_id>')
 def show_iep(student_id, iep_id):
