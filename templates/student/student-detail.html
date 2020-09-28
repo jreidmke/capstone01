@@ -4,7 +4,20 @@
 
 {% block content %}
 
-{{grade_level_standards}}
+<label for="state" accesskey="s">State / Province / Territory</label>
+<select name="state" id=state">
+	<option value="">-- choose one --
+	<optgroup label="USA">
+		<option value="AL">Alabama
+		<option value="CA">California
+		<option> … remaining US states …
+	</optgroup>
+	<optgroup label="Canada">
+		<option value="AB">Alberta
+		<option value="CA">British Columbia
+		<option> … remaining provinces and territories …
+	</optgroup>
+</select>
 
 <div class="container mt-3">
     <div class="row">
