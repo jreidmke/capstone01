@@ -395,8 +395,8 @@ def select_standard(goal_id):
 
         db.session.add(standard)
         db.session.commit()
-        flash(f'{standard.standard_text}')
-        return redirect('/')
+        flash(f'{standard.standard_text}', 'good')
+        return redirect(f'/iep/{goal.iep_id}/goal/')
 
     return render_template('/student/select-standard.html', form=form)
 
