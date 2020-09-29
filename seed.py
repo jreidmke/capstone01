@@ -238,6 +238,14 @@ gs6 = GoalStandard(goal_id=goal6.id,
     standard_text='Draw evidence from literary or informational texts to support analysis, reflection, and research.',
     standard_id='9FB25AE0DFE501317D1768A86D17958E')
 
+db.session.add(gss1)
+db.session.add(gss2)
+db.session.add(gss3)
+db.session.add(gss4)
+db.session.add(gss5)
+db.session.add(gss6)
+
+
 db.session.add(gs1)
 db.session.add(gs2)
 db.session.add(gs3)
