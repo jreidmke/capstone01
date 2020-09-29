@@ -271,6 +271,24 @@ def to_guardian_message(teacher_id, student_id):
     flash('You are not authorized to view this page.')
     return redirect('/teacher/login')
 
+@app.route('/guardian/<int:teacher_id>/messages')
+def show_teacher_messages(teacher_id):
+    teacher = Teacher.query.get(teacher_id)
+    messages = MsgToTeacher.query.filter_by(teacher_id=teacher.id).all()
+    guardian_ids = [message.guardian_id for message in messages]
+    guardians = Guardian.query.filter(Guardian.id.in_(guardians_ids)).all()
+    return render_template('/teacher/messages.html', messages=messages, teacher=teacher, guardians=guardians)
+
+@app.route('/guardian/<int:guardian_id>/message/<int:message_id>')
+def show_guardian_message(guardian_id, message_id):
+    message = MsgToGuardian.query.get(message_id)
+    guardian = Guardian.query.get(message.guardian_id)
+    teacher = Teacher.query.get(message.teacher_id)
+    message.is_read = True
+    db.session.add(message)
+    db.session.commit()
+    return render_template('/guardian/message.html', message=message, teacher=teacher, guardian=guardian)
+
 #************************************************
 #************************************************
 # Guardian Routing. Register and Login.
@@ -367,6 +385,16 @@ def show_guardian_messages(guardian_id):
     student_ids = [message.student_id for message in messages]
     students = Student.query.filter(Student.id.in_(student_ids)).all()
     return render_template('/guardian/messages.html', guardian=guardian, messages=messages, students=students)
+
+@app.route('/guardian/<int:guardian_id>/message/<int:message_id>')
+def show_guardian_message(guardian_id, message_id):
+    message = MsgToGuardian.query.get(message_id)
+    guardian = Guardian.query.get(message.guardian_id)
+    teacher = Teacher.query.get(message.teacher_id)
+    message.is_read = True
+    db.session.add(message)
+    db.session.commit()
+    return render_template('/guardian/message.html', message=message, teacher=teacher, guardian=guardian)
 
 #************************************************
 #************************************************
