@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} {{guardian.first_name}}'s Messages {% endblock %}
+{% block title %} {{teacher.first_name}}'s Messages {% endblock %}
 
 {% block content %}
 
@@ -18,9 +18,8 @@
         </thead>
         <tbody>
             {% for message in messages %}
-                {% for student in students %}
-                        {% if message.student_id == student.id %}
-
+                {% for guardian in guardians %}
+                        {% if message.guardian_id == guardian.id %}
                         <tr>
                                 {% if message.is_read == False %}
                                     <td><p class="font-weight-light">Unread</p></td>
@@ -28,8 +27,8 @@
                                     <td><p class="font-weight-dark">Read</p></td>
                                 {% endif %}
                                     <td>{{message.date_sent}}</td>
-                                    <td>{{student.first_name}} {{student.last_name}}</td>
-                                    <td><a href="/guardian/{{guardian.id}}/message/{{message.id}}">{{message.subject}}</a></td>
+                                    <td>{{guardian.first_name}} {{guardian.last_name}}</td>
+                                    <td><a href="/teacher/{{teacher.id}}/message/{{message.id}}">{{message.subject}}</a></td>
                                     {% if message.attention_level == "Take your time!" %}
                                     <td><span class="badge badge-success">No Hurry!</span></td>
                                     {% elif message.attention_level == "Please get back to me." %}
