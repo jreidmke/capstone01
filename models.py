@@ -279,6 +279,9 @@ class MsgToTeacher(db.Model):
     guardian_id = db.Column(db.Integer,
         db.ForeignKey('guardians.id', ondelete="cascade"),
         nullable=False)
+    student_id = db.Column(db.Integer,
+        db.ForeignKey('students.id', ondelete="cascade"),
+        nullable=False)
     date_sent = db.Column(db.Date,
         default=datetime.date.today())
     subject = db.Column(db.String,
@@ -286,6 +289,9 @@ class MsgToTeacher(db.Model):
     attention_level = db.Column(db.String,
         default='Take your time.')
     message = db.Column(db.String,
+        nullable=False)
+    is_read = db.Column(db.Boolean,
+        default=False,
         nullable=False)
 
 class MsgToGuardian(db.Model):
@@ -303,6 +309,9 @@ class MsgToGuardian(db.Model):
         db.ForeignKey('guardians.id', ondelete="cascade"),
         primary_key=True,
         nullable=False)
+    student_id = db.Column(db.Integer,
+        db.ForeignKey('students.id', ondelete="cascade"),
+        nullable=False)
     date_sent = db.Column(db.Date,
         default=datetime.date.today())
     subject = db.Column(db.String,
@@ -310,4 +319,7 @@ class MsgToGuardian(db.Model):
     attention_level = db.Column(db.String,
         default='Take your time.')
     message = db.Column(db.String,
+        nullable=False)
+    is_read = db.Column(db.Boolean,
+        default=False,
         nullable=False)
