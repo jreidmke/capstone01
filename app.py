@@ -427,7 +427,7 @@ def set_current_data(goal_id):
 
         db.session.add(data)
         db.session.commit()
-        flash(f'Data updated for goal: {goal.goal}')
+        flash(f'Data updated for goal: {goal.goal}', "good")
         return redirect(f'/student/{iep.student_id}/iep/{iep.id}')
 
     return render_template('/student/current-data.html', goal=goal, data=data, form=form)
