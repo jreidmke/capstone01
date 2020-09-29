@@ -191,6 +191,8 @@ class IEP(db.Model):
     teacher_id = db.Column(db.Integer,
         db.ForeignKey('teachers.id', ondelete='cascade'),
         nullable=False)
+    is_locked = db.Column(db.Boolean,
+        nullable=False)
 
     teacher = db.relationship("Teacher", primaryjoin="IEP.teacher_id == Teacher.id")
 
