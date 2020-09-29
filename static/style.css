@@ -26,3 +26,29 @@ input {
 select {
     margin: 10px;
 }
+
+ul#attention_level {
+    margin: 10px;
+    height: 120px;
+    list-style-type: none
+}
+
+a[target=_blank] {
+    background-color: yellow;
+  }
+
+label[for=attention_level-0] {
+    color: green;
+}
+
+label[for=attention_level-1] {
+    color: blue;
+}
+
+label[for=attention_level-2] {
+    color: red;
+}
+
+textarea#message {
+    margin: 10px;
+}
