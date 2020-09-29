@@ -277,14 +277,28 @@ def to_teacher_message(guardian_id, student_id):
     guardian = Guardian.query.get(guardian_id)
     student = Student.query.get(student_id)
     iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
-
+    teacher = Teacher.query.get(iep.teacher_id)
     goals = Goal.query.filter_by(iep_id=iep.id).all()
+    goals = ["Not about specific goal"] + [goal.goal for goal in goals]
 
     if session[IS_TEACHER] == False and session[CURR_USER_KEY] == guardian_id:
         form = MsgToTeacherForm()
+        form.subject.choices = goals
 
         if form.validate_on_submit():
-            msg = MsgToTeacher()
+            msg = MsgToTeacher(
+                teacher_id=iep.teacher_id,
+                guardian_id=guardian.id,
+                subject=form.subject.data,
+                attention_level=form.attention_level.data,
+                message=form.message.data
+            )
+            db.session.add(msg)
+            db.session.commit()
+            flash(f'Message to {teacher.first_name} {teacher.last_name} sent at {msg.date_sent}')
+            return redirect(f'/guardian/{guardian.id}')
+        return render_template('/guardian/new-message.html', goals=goals, form=form)
+
 
 
     flash('You are not authorized to view this page.')
@@ -497,18 +511,6 @@ def edit_goal_page(goal_id):
         )
         db.session.add(data)
         db.session.commit()
-
-
-        # goal.goal = g_form.goal.data
-        # goal.subject = g_form.subject.data
-        # db.session.add(goal)
-        # db.session.commit()
-
-        # cw_data.baseline = d_form.baseline.data
-        # cw_data.current = d_form.baseline.data
-        # cw_data.attainment = d_form.attainment.data
-        # db.session.add(cw_data)
-        # db.session.commit()
 
         flash(f"Goal updated!", "good")
         return redirect(f'/goal/{goal.id}/standard_set')
