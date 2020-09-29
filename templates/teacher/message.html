@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %} Message from {{teacher.first_name}} {{teacher.last_name}} {% endblock %}
+{% block title %} Message from {{guardian.first_name}} {{guardian.last_name}} {% endblock %}
 
 {% block content %}
 
-<div class="container">
+<div class="container mt-3">
     <div class="card">
         <div class="card-body">
           <h5 class="card-title">{{message.subject}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{message.date_sent}}</h6>
           <p class="card-text">{{message.message}}</p>
-          <a href="/guardian/{{guardian.id}}/messages" class="card-link">Return to Mailbox</a>
+          <a href="/teacher/{{teacher.id}}/messages" class="card-link">Return to Mailbox</a>
         </div>
     </div>
 </div>
