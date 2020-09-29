@@ -3,7 +3,7 @@ import requests
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData, GoalStandard, GoalStandardSet, MsgToTeacher, MsgToGuardian
-from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetDataForm, StandardDataForm,
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetForm, StandardForm,
 from datetime import date
 from operator import itemgetter
 
@@ -354,7 +354,7 @@ def select_standard_set(goal_id):
 
     selected_standard_titles = [standard_set['title'] for standard_set in selected_standard_set]
 
-    form = StandardSetDataForm()
+    form = StandardSetForm()
 
     form.standard_set.choices=selected_standard_titles
 
@@ -384,7 +384,7 @@ def select_standard(goal_id):
 
     standard_text = list(standards.keys())
 
-    form = StandardDataForm()
+    form = StandardForm()
 
     form.standard.choices = standard_text
 
