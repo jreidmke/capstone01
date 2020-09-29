@@ -271,23 +271,23 @@ def to_guardian_message(teacher_id, student_id):
     flash('You are not authorized to view this page.')
     return redirect('/teacher/login')
 
-@app.route('/guardian/<int:teacher_id>/messages')
+@app.route('/teacher/<int:teacher_id>/messages')
 def show_teacher_messages(teacher_id):
     teacher = Teacher.query.get(teacher_id)
     messages = MsgToTeacher.query.filter_by(teacher_id=teacher.id).all()
     guardian_ids = [message.guardian_id for message in messages]
-    guardians = Guardian.query.filter(Guardian.id.in_(guardians_ids)).all()
+    guardians = Guardian.query.filter(Guardian.id.in_(guardian_ids)).all()
     return render_template('/teacher/messages.html', messages=messages, teacher=teacher, guardians=guardians)
 
-@app.route('/guardian/<int:guardian_id>/message/<int:message_id>')
-def show_guardian_message(guardian_id, message_id):
-    message = MsgToGuardian.query.get(message_id)
+@app.route('/teacher/<int:teacher_id>/message/<int:message_id>')
+def show_teacher_message(teacher_id, message_id):
+    message = MsgToTeacher.query.get(message_id)
     guardian = Guardian.query.get(message.guardian_id)
     teacher = Teacher.query.get(message.teacher_id)
     message.is_read = True
     db.session.add(message)
     db.session.commit()
-    return render_template('/guardian/message.html', message=message, teacher=teacher, guardian=guardian)
+    return render_template('/teacher/message.html', message=message, teacher=teacher, guardian=guardian)
 
 #************************************************
 #************************************************
