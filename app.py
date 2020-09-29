@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData, GoalStandard, GoalStandardSet, MsgToTeacher, MsgToGuardian
 from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetForm, StandardForm, MsgToTeacherForm, MsgToGuardianForm
 from datetime import date
-from operator import itemgetter
+from re import sub
 
 # from wtforms_components import SelectWidget
 
@@ -78,7 +78,7 @@ def get_standards(standard_set_code):
 def extract_username_from_selectfield(string):
     string = string.split()
     username = string[-1]
-    return re.sub(r'[\(\)]', '', username)
+    return sub(r'[\(\)]', '', username)
 
 def append_zero_convert_to_string(int):
     """The API formats single digit grades as strings with appended 0's (ex. 02, 07, 08)"""
@@ -249,9 +249,9 @@ def to_guardian_message(teacher_id, student_id):
 
         if form.validate_on_submit():
 
-            import pdb; pdb.set_trace()
 
-            guardian = Guardian.query.filter_by(first_name=form.guardian_id.data).first()
+            guardian_username = extract_username_from_selectfield(form.guardian_id.data)
+            guardian = Guardian.query.filter_by(username=guardian_username).first()
 
             msg = MsgToGuardian(
                 teacher_id=teacher.id,
