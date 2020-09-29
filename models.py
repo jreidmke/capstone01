@@ -215,8 +215,9 @@ class Goal(db.Model):
         nullable=False)
 
     data = db.relationship('ClassworkData', backref='goal')
-    standard = db.relationship('GoalStandard', backref='goal')
-    standard_set = db.relationship('GoalStandardSet', backref='goal')
+    standard = db.relationship('GoalStandard', cascade="all, delete-orphan", backref='goal')
+    standard_set = db.relationship('GoalStandardSet', cascade="all, delete-orphan", backref='goal')
+
 
 class GoalStandardSet(db.Model):
     """Here the teacher selects the standard set from which their standard originates"""
@@ -310,6 +311,3 @@ class MsgToGuardian(db.Model):
         default='Take your time.')
     message = db.Column(db.String,
         nullable=False)
-
-    teacher = db.relationship('Teacher')
-    guardian = db.relationship('Guardian')
