@@ -84,5 +84,6 @@ class MsgToTeacherForm(FlaskForm):
 class MsgToGuardianForm(FlaskForm):
 
     subject = SelectField('Select if message is about specific goal. Otherwise, leave blank.')
+    guardian_id = SelectField('Select Guardian', validators=[DataRequired()])
     attention_level = RadioField('Urgency Level', choices=['Take your time!', 'Please get back to me.', 'Urgent! Needs attention!'])
     message = TextAreaField('Message', render_kw={'rows':20}, validators=[DataRequired()])
