@@ -435,9 +435,11 @@ def set_current_data(goal_id):
 @app.route('/goal/<int:goal_id>/edit', methods=["GET", "POST"])
 def edit_goal_page(goal_id):
     goal = Goal.query.get(goal_id)
+    iep = IEP.query.get(goal.iep.id)
+
     teacher = Teacher.query.get(goal.iep.teacher_id)
     if goal.iep.is_locked == True:
-        flash('IEP is locked. Goals cannot be edited.')
+        flash('IEP is locked. Goals cannot be edited.', 'bad')
         return redirect(f'/teacher/{teacher.id}')
 
     student = Student.query.get(goal.iep.student_id)
@@ -450,21 +452,50 @@ def edit_goal_page(goal_id):
 
     g_form.subject.choices = subject_list
 
-    if form.validate_on_submit():
-        cw_data = ClassworkDataForm.query.get(goal_id)
+    if g_form.validate_on_submit() and d_form.validate_on_submit():
 
-        goal.goal = g_form.goal.data
-        goal.subject = g_form.subject.data
+        Goal.query.filter_by(id=goal.id).delete()
+        ClassworkData.query.filter_by(goal_id=goal.id).delete()
+        goal = Goal(
+            iep_id=iep.id,
+            goal=g_form.goal.data,
+            subject=g_form.subject.data
+        )
         db.session.add(goal)
         db.session.commit()
 
-        cw_data.baseline = d_form.baseline.data
-        cw_data.current = d_form.baseline.data
-        cw_data.attainment = d_form.attainment.data
-        db.session.add(cw_data)
+        data = ClassworkData(
+            goal_id=goal.id,
+            baseline=d_form.baseline.data,
+            current=d_form.baseline.data,
+            attainment=d_form.attainment.data
+        )
+        db.session.add(data)
         db.session.commit()
+
+
+        # goal.goal = g_form.goal.data
+        # goal.subject = g_form.subject.data
+        # db.session.add(goal)
+        # db.session.commit()
+
+        # cw_data.baseline = d_form.baseline.data
+        # cw_data.current = d_form.baseline.data
+        # cw_data.attainment = d_form.attainment.data
+        # db.session.add(cw_data)
+        # db.session.commit()
 
         flash(f"Goal updated!", "good")
         return redirect(f'/goal/{goal.id}/standard_set')
 
-    return render_template('/student/edit-goal.html', form=form)
+    return render_template('/student/edit-goal.html', g_form=g_form, d_form=d_form)
+
+@app.route('/iep/<int:iep_id>/lock')
+def lock_iep(iep_id):
+    iep = IEP.query.get(iep_id)
+    iep.is_locked=True
+    db.session.add(iep)
+    db.session.commit()
+    student = Student.query.get(iep.student_id)
+    flash('IEP locked')
+    return redirect(f'/student/{student.id}/iep/{iep.id}')
