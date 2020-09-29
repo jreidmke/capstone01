@@ -75,6 +75,10 @@ def get_standards(standard_set_code):
 
     return standards_dict
 
+def extract_username_from_selectfield(string):
+    string = string.split()
+    username = string[-1]
+    return re.sub(r'[\(\)]', '', username)
 
 def append_zero_convert_to_string(int):
     """The API formats single digit grades as strings with appended 0's (ex. 02, 07, 08)"""
@@ -220,26 +224,37 @@ def add_family(teacher_id):
         return render_template('/teacher/add-family.html', form=form, students=students, guardians=guardians)
 
 @app.route('/teacher/<int:teacher_id>/new-message/student/<int:student_id>', methods=["GET", "POST"])
-def to_teacher_message(guardian_id, student_id):
+def to_guardian_message(teacher_id, student_id):
 
     if session.get(IS_TEACHER) == None:
         flash('You are not authorized to view this page.', 'bad')
-        return redirect('/guardian/login')
+        return redirect('/teacher/login')
 
-    guardian = Guardian.query.get(guardian_id)
+    teacher = Teacher.query.get(teacher_id)
     student = Student.query.get(student_id)
+
+    guardians = Family.query.filter_by(student_id=student.id).all()
+    guardian_ids = [guardian.guardian_id for guardian in guardians]
+    guardians = Guardian.query.filter(Guardian.id.in_(guardian_ids)).all()
+    guardian_names = [guardian.first_name + ' ' + guardian.last_name + ' ' + f'({guardian.username})' for guardian in guardians]
+
     iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
-    teacher = Teacher.query.get(iep.teacher_id)
     goals = Goal.query.filter_by(iep_id=iep.id).all()
     goals = ["Not about specific goal"] + [goal.goal for goal in goals]
 
-    if (session[IS_TEACHER] == False and session[CURR_USER_KEY] == guardian_id):
-        form = MsgToTeacherForm()
+    if (session[IS_TEACHER] == True and session[CURR_USER_KEY] == teacher.id):
+        form = MsgToGuardianForm()
         form.subject.choices = goals
+        form.guardian_id.choices = guardian_names
 
         if form.validate_on_submit():
-            msg = MsgToTeacher(
-                teacher_id=iep.teacher_id,
+
+            import pdb; pdb.set_trace()
+
+            guardian = Guardian.query.filter_by(first_name=form.guardian_id.data).first()
+
+            msg = MsgToGuardian(
+                teacher_id=teacher.id,
                 guardian_id=guardian.id,
                 subject=form.subject.data,
                 attention_level=form.attention_level.data,
@@ -247,12 +262,13 @@ def to_teacher_message(guardian_id, student_id):
             )
             db.session.add(msg)
             db.session.commit()
-            flash(f'Message to {teacher.first_name} {teacher.last_name} sent at {msg.date_sent}', 'good')
-            return redirect(f'/guardian/{guardian.id}')
-        return render_template('/guardian/new-message.html', goals=goals, form=form)
+            guardian = Guardian.query.get(msg.guardian_id)
+            flash(f'Message to {guardian.first_name} {guardian.last_name} sent at {msg.date_sent}', 'good')
+            return redirect(f'/teacher/{guardian.id}')
+        return render_template('/teacher/new-message.html', goals=goals, form=form)
 
     flash('You are not authorized to view this page.')
-    return redirect('/guardian/login')
+    return redirect('/teacher/login')
 
 #************************************************
 #************************************************
