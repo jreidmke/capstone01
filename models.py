@@ -196,6 +196,7 @@ class IEP(db.Model):
         default=False)
 
     teacher = db.relationship("Teacher", primaryjoin="IEP.teacher_id == Teacher.id")
+    goals = db.relationship("Goal", backref='iep')
 
 class Goal(db.Model):
     """Goal Model"""
