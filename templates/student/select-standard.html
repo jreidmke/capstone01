@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Teacher Registration {% endblock %}
+{% block title %} Select Standard {% endblock %}
 
 {% block content %}
 
@@ -8,7 +8,7 @@
 <div class="container mt-3">
     <div class="col-6">
 
-        <h1>Guardian Registration</h1>
+        <h1>Select Standard</h1>
 
         <form method="POST" id="user_form">
             {{ form.hidden_tag() }}
@@ -22,7 +22,7 @@
             {{ field(placeholder=field.label.text, class="form-control") }}
             {% endfor %}
 
-            <button class="btn btn-primary btn-lg btn-block ml-2">Sign me up!</button>
+            <button class="btn btn-primary btn-lg btn-block ml-2">Select Standard</button>
         </form>
     </div>
 </div>

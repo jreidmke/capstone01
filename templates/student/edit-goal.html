@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Add New Student {% endblock %}
+{% block title %} Edit Student Goal {% endblock %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-6">
 
-            <h1 class="text-center">Add New Goal</h1>
+            <h1 class="text-center">Edit Student Goal</h1>
 
             <form method="POST" id="user_form">
                 {{ g_form.hidden_tag() }}
@@ -37,10 +37,10 @@
                 {{ field(placeholder=field.label.text, class="form-control") }}
                 {% endfor %}
 
-                <button class="btn btn-primary btn-lg btn-block ml-2">Add Goal</button>
+                <button class="btn btn-primary btn-lg btn-block ml-2">Edit Goal</button>
             </form>
         </div>
-       
+
 
 
 

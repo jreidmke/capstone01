@@ -266,7 +266,7 @@ def to_guardian_message(teacher_id, student_id):
             guardian = Guardian.query.get(msg.guardian_id)
             flash(f'Message to {guardian.first_name} {guardian.last_name} sent on {msg.date_sent}', 'good')
             return redirect(f'/teacher/{teacher.id}')
-        return render_template('/teacher/new-message.html', goals=goals, form=form)
+        return render_template('/teacher/new-message.html', goals=goals, form=form, student=student)
 
     flash('You are not authorized to view this page.')
     return redirect('/teacher/login')
@@ -373,7 +373,7 @@ def to_teacher_message(guardian_id, student_id):
             db.session.commit()
             flash(f'Message to {teacher.first_name} {teacher.last_name} sent at {msg.date_sent}', 'good')
             return redirect(f'/guardian/{guardian.id}')
-        return render_template('/guardian/new-message.html', goals=goals, form=form)
+        return render_template('/guardian/new-message.html', goals=goals, form=form, teacher=teacher)
 
     flash('You are not authorized to view this page.')
     return redirect('/guardian/login')
@@ -558,7 +558,7 @@ def set_current_data(goal_id):
         db.session.add(data)
         db.session.commit()
         flash(f'Data updated for goal: {goal.goal}', "good")
-        return redirect(f'/student/{iep.student_id}/iep/{iep.id}')
+        return redirect(f'/student/{iep.student_id}')
 
     return render_template('/student/current-data.html', goal=goal, data=data, form=form)
 
@@ -615,5 +615,5 @@ def lock_iep(iep_id):
     db.session.add(iep)
     db.session.commit()
     student = Student.query.get(iep.student_id)
-    flash('IEP locked')
+    flash('IEP locked', 'good')
     return redirect(f'/student/{student.id}/iep/{iep.id}')

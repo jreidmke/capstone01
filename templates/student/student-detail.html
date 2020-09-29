@@ -46,9 +46,10 @@
         </div>
 
         <div class="row">
+            <h1 class="display-4">IEP Goals from Most Recent IEP ({{latest_iep.date}})</h1>
             {% for goal in goals %}
                 <div class="col-4 text-center">
-                    <div class="card mt-3" style="width: 18rem;">
+                    <div class="card mt-3" style="width: 18rem; height:23rem">
                         <div class="card-body">
                             <h5 class="card-title">{{goal.goal}}</h5>
                                 {% for data in goal.data %}
@@ -59,7 +60,7 @@
                                 {% endfor %}
 
                                 <div class="btn-group dropright">
-                                    <button type="button" class="btn btn-secondary dropdown-toggle my-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-secondary btn-large btn-block dropdown-toggle my-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       View Related Standard
                                     </button>
                                     <div class="dropdown-menu">
@@ -81,5 +82,13 @@
 
     </div>
 </div>
-
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<p class="">.</p>
 {% endblock %}

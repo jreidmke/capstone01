@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for message in messages %}
+            {% for message in messages|reverse %}
                 {% for student in students %}
                         {% if message.student_id == student.id %}
 
