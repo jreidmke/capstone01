@@ -4,21 +4,6 @@
 
 {% block content %}
 
-<label for="state" accesskey="s">State / Province / Territory</label>
-<select name="state" id=state">
-	<option value="">-- choose one --
-	<optgroup label="USA">
-		<option value="AL">Alabama
-		<option value="CA">California
-		<option> … remaining US states …
-	</optgroup>
-	<optgroup label="Canada">
-		<option value="AB">Alberta
-		<option value="CA">British Columbia
-		<option> … remaining provinces and territories …
-	</optgroup>
-</select>
-
 <div class="container mt-3">
     <div class="row">
 
@@ -52,7 +37,7 @@
             <h3 class="text-center">IEPs</h3>
             <div class="card" style="width: 18rem;">
                 <ul class="list-group list-group-flush">
-                    {% for iep in ieps %}
+                    {% for iep in ieps|reverse %}
                         <li class="list-group-item"><b><a href="/student/{{student.id}}/iep/{{iep.id}}">{{iep.date}}</a></b></li>
                     {% endfor %}
                         <li class="list-group-item"><b><a href="/student/{{student.id}}/iep">Create New IEP+</a></b></li>
@@ -72,12 +57,26 @@
                             <p class="card-text text-info">Current: {{data.current}}</p>
                             <p class="card-text text-success">Level of Attainment: {{data.attainment}}</p>
                                 {% endfor %}
+
+                                <div class="btn-group dropright">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle my-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      View Related Standard
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item text-secondary"><b>Standard: </b>{{goal.standard[0].standard_text}}</li>
+                                            <li class="list-group-item"><b>From: </b>{{goal.standard_set[0].standard_set_title}}</li>
+
+                                        </ul>
+                                    </div>
+                                </div>
                             <a href="/goal/{{goal.id}}" class="btn btn-primary btn-large btn-block">Edit Current Data<a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
+
 
 
     </div>

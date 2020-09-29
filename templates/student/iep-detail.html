@@ -23,15 +23,18 @@
                             </button>
                             <div class="dropdown-menu">
                                 <ul class="list-group list-group-flush">
-                                    {% for data in goal.data %}
-                                        <li class="list-group-item text-secondary"><b>Last Updated: </b>{{data.current_data_date}}</li>
-                                        <li class="list-group-item text-danger"><b>Baseline: </b>{{data.baseline}}</li>
-                                        <li class="list-group-item text-info"><b>Current: </b>{{data.current}}</li>
-                                        <li class="list-group-item text-success"><b>Attainment: </b>{{data.attainment}}</li>
-                                    {% endfor %}
+
+                                        <li class="list-group-item text-secondary"><b>Last Updated: </b>{{goal.data[0].current_data_date}}</li>
+                                        <li class="list-group-item text-danger"><b>Baseline: </b>{{goal.data[0].baseline}}</li>
+                                        <li class="list-group-item text-info"><b>Current: </b>{{goal.data[0].current}}</li>
+                                        <li class="list-group-item text-success"><b>Attainment: </b>{{goal.data[0].attainment}}</li>
+                                        <li class="list-group-item "><b>Related Standard: </b>{{goal.standard[0].standard_text}}</li>
+                                        <li class="list-group-item "><b>From: </b>{{goal.standard_set[0].standard_set_title}}</li>
+
+
                                 </ul>
                             </div>
-                          </div>
+                        </div>
                     {% endfor %}
                 </ul>
 
