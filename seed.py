@@ -27,19 +27,19 @@ Teacher.register(first_name='James',
     username='jreidmke',
     password='123'
     )
-Teacher.register(first_name='Tanya',
-    last_name='Scoma',
+Teacher.register(first_name='Maria',
+    last_name='Aldapa',
     title='3rd-5th Sped',
     school_id = 2,
-    username='tanyas',
-    password='badgers123'
+    username='mariaa',
+    password='123'
     )
-Teacher.register(first_name='Sally',
+Teacher.register(first_name='Freddie',
     last_name='Krueger',
     title='Middle School Sped',
     school_id=3,
-    username='sallyk',
-    password='zach123'
+    username='freddiek',
+    password='123'
     )
 
 stu1 = Student(first_name='Oliver',
