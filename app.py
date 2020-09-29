@@ -219,6 +219,41 @@ def add_family(teacher_id):
         guardians = Guardian.query.all()
         return render_template('/teacher/add-family.html', form=form, students=students, guardians=guardians)
 
+@app.route('/teacher/<int:teacher_id>/new-message/student/<int:student_id>', methods=["GET", "POST"])
+def to_teacher_message(guardian_id, student_id):
+
+    if session.get(IS_TEACHER) == None:
+        flash('You are not authorized to view this page.', 'bad')
+        return redirect('/guardian/login')
+
+    guardian = Guardian.query.get(guardian_id)
+    student = Student.query.get(student_id)
+    iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
+    teacher = Teacher.query.get(iep.teacher_id)
+    goals = Goal.query.filter_by(iep_id=iep.id).all()
+    goals = ["Not about specific goal"] + [goal.goal for goal in goals]
+
+    if (session[IS_TEACHER] == False and session[CURR_USER_KEY] == guardian_id):
+        form = MsgToTeacherForm()
+        form.subject.choices = goals
+
+        if form.validate_on_submit():
+            msg = MsgToTeacher(
+                teacher_id=iep.teacher_id,
+                guardian_id=guardian.id,
+                subject=form.subject.data,
+                attention_level=form.attention_level.data,
+                message=form.message.data
+            )
+            db.session.add(msg)
+            db.session.commit()
+            flash(f'Message to {teacher.first_name} {teacher.last_name} sent at {msg.date_sent}', 'good')
+            return redirect(f'/guardian/{guardian.id}')
+        return render_template('/guardian/new-message.html', goals=goals, form=form)
+
+    flash('You are not authorized to view this page.')
+    return redirect('/guardian/login')
+
 #************************************************
 #************************************************
 # Guardian Routing. Register and Login.
@@ -274,6 +309,11 @@ def show_guardian_detail(guardian_id):
 
 @app.route('/guardian/<int:guardian_id>/new-message/student/<int:student_id>', methods=["GET", "POST"])
 def to_teacher_message(guardian_id, student_id):
+
+    if session.get(IS_TEACHER) == None:
+        flash('You are not authorized to view this page.', 'bad')
+        return redirect('/guardian/login')
+
     guardian = Guardian.query.get(guardian_id)
     student = Student.query.get(student_id)
     iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
@@ -281,7 +321,7 @@ def to_teacher_message(guardian_id, student_id):
     goals = Goal.query.filter_by(iep_id=iep.id).all()
     goals = ["Not about specific goal"] + [goal.goal for goal in goals]
 
-    if session[IS_TEACHER] == False and session[CURR_USER_KEY] == guardian_id:
+    if (session[IS_TEACHER] == False and session[CURR_USER_KEY] == guardian_id):
         form = MsgToTeacherForm()
         form.subject.choices = goals
 
@@ -295,11 +335,9 @@ def to_teacher_message(guardian_id, student_id):
             )
             db.session.add(msg)
             db.session.commit()
-            flash(f'Message to {teacher.first_name} {teacher.last_name} sent at {msg.date_sent}')
+            flash(f'Message to {teacher.first_name} {teacher.last_name} sent at {msg.date_sent}', 'good')
             return redirect(f'/guardian/{guardian.id}')
         return render_template('/guardian/new-message.html', goals=goals, form=form)
-
-
 
     flash('You are not authorized to view this page.')
     return redirect('/guardian/login')
