@@ -277,7 +277,6 @@ class MsgToTeacher(db.Model):
         nullable=False)
     guardian_id = db.Column(db.Integer,
         db.ForeignKey('guardians.id', ondelete="cascade"),
-        primary_key=True,
         nullable=False)
     date_sent = db.Column(db.Date,
         default=datetime.date.today())
