@@ -18,3 +18,11 @@ input {
     margin-left: 10px;
     margin-bottom: 10px;
 }
+
+.form-control#subject {
+    margin-left: 10px;
+}
+
+select {
+    margin: 10px;
+}
