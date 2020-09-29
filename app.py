@@ -3,7 +3,7 @@ import requests
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData, GoalStandard, GoalStandardSet, MsgToTeacher, MsgToGuardian
-from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetForm, StandardForm,
+from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetForm, StandardForm, MsgToTeacherForm, MsgToGuardianForm
 from datetime import date
 from operator import itemgetter
 
@@ -97,10 +97,6 @@ def logout():
 
     if IS_TEACHER in session:
         del session[IS_TEACHER]
-
-    # states = get_state_codes()
-    # standards = get_standards_list("549159D28465455FB144F5B67F3ACDFF")
-    # grade_level_standards = get_grade_level_standard_sets(append_zero_convert_to_string(2), standards)
 
 
 # Landing page.
@@ -223,7 +219,11 @@ def add_family(teacher_id):
         guardians = Guardian.query.all()
         return render_template('/teacher/add-family.html', form=form, students=students, guardians=guardians)
 
+#************************************************
+#************************************************
 # Guardian Routing. Register and Login.
+#************************************************
+#************************************************
 
 @app.route('/guardian/login', methods=["GET", "POST"])
 def guardian_login():
@@ -271,6 +271,31 @@ def show_guardian_detail(guardian_id):
     guardian = Guardian.query.get(guardian_id)
     family = Family.query.filter_by(guardian_id=guardian.id).all()
     return render_template('guardian/guardian-detail.html', guardian=guardian)
+
+@app.route('/guardian/<int:guardian_id>/new-message/student/<int:student_id>', methods=["GET", "POST"])
+def to_teacher_message(guardian_id, student_id):
+    guardian = Guardian.query.get(guardian_id)
+    student = Student.query.get(student_id)
+    iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
+
+    goals = Goal.query.filter_by(iep_id=iep.id).all()
+
+    if session[IS_TEACHER] == False and session[CURR_USER_KEY] == guardian_id:
+        form = MsgToTeacherForm()
+
+        if form.validate_on_submit():
+            msg = MsgToTeacher()
+
+
+    flash('You are not authorized to view this page.')
+    return redirect('/guardian/login')
+
+
+#************************************************
+#************************************************
+# Student Routing.
+#************************************************
+#************************************************
 
 @app.route('/student/<int:student_id>')
 def show_student_detail(student_id):
