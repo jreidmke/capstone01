@@ -212,6 +212,7 @@ class Goal(db.Model):
 
     data = db.relationship('ClassworkData', backref='goal')
     standard = db.relationship('GoalStandard', backref='goal')
+    standard_set = db.relationship('GoalStandardSet', backref='goal')
 
 class GoalStandardSet(db.Model):
     """Here the teacher selects the standard set from which their standard originates"""
