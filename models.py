@@ -307,7 +307,6 @@ class MsgToGuardian(db.Model):
         nullable=False)
     guardian_id = db.Column(db.Integer,
         db.ForeignKey('guardians.id', ondelete="cascade"),
-        primary_key=True,
         nullable=False)
     student_id = db.Column(db.Integer,
         db.ForeignKey('students.id', ondelete="cascade"),
