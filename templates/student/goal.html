@@ -39,11 +39,10 @@
 
                 <button class="btn btn-primary btn-lg btn-block ml-2">Add Goal</button>
             </form>
-            <form action="/student/{{student.id}}/iep/{{iep_id}}">
+            <form action="/iep/{{iep_id}}/lock">
                 <button class="btn btn-danger btn-lg btn-block mt-2 ml-2">Commit Goals and Data</button>
             </form>
         </div>
-
         <div class="col-4">
             <div class="card m-2" style="width: 40rem;">
                 <div class="card-body">
@@ -57,6 +56,9 @@
                             <button type="button" class="btn btn-secondary dropdown-toggle my-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               {{goal.goal}}
                             </button>
+
+                            <a href="/goal/{{goal.id}}/edit" class="btn btn-outline-danger">Edit Goal</a>
+
                             <div class="dropdown-menu">
                                 <ul class="list-group list-group-flush">
                                     {% for data in goal.data %}
