@@ -256,6 +256,7 @@ def to_guardian_message(teacher_id, student_id):
             msg = MsgToGuardian(
                 teacher_id=teacher.id,
                 guardian_id=guardian.id,
+                student_id=student.id,
                 subject=form.subject.data,
                 attention_level=form.attention_level.data,
                 message=form.message.data
@@ -263,8 +264,8 @@ def to_guardian_message(teacher_id, student_id):
             db.session.add(msg)
             db.session.commit()
             guardian = Guardian.query.get(msg.guardian_id)
-            flash(f'Message to {guardian.first_name} {guardian.last_name} sent at {msg.date_sent}', 'good')
-            return redirect(f'/teacher/{guardian.id}')
+            flash(f'Message to {guardian.first_name} {guardian.last_name} sent on {msg.date_sent}', 'good')
+            return redirect(f'/teacher/{teacher.id}')
         return render_template('/teacher/new-message.html', goals=goals, form=form)
 
     flash('You are not authorized to view this page.')
@@ -345,6 +346,7 @@ def to_teacher_message(guardian_id, student_id):
             msg = MsgToTeacher(
                 teacher_id=iep.teacher_id,
                 guardian_id=guardian.id,
+                student_id=student.id,
                 subject=form.subject.data,
                 attention_level=form.attention_level.data,
                 message=form.message.data
@@ -358,6 +360,13 @@ def to_teacher_message(guardian_id, student_id):
     flash('You are not authorized to view this page.')
     return redirect('/guardian/login')
 
+@app.route('/guardian/<int:guardian_id>/messages')
+def show_guardian_messages(guardian_id):
+    guardian = Guardian.query.get(guardian_id)
+    messages = MsgToGuardian.query.filter_by(guardian_id=guardian.id).all()
+    student_ids = [message.student_id for message in messages]
+    students = Student.query.filter(Student.id.in_(student_ids)).all()
+    return render_template('/guardian/messages.html', guardian=guardian, messages=messages, students=students)
 
 #************************************************
 #************************************************
