@@ -220,6 +220,9 @@ class Goal(db.Model):
 
 class GoalStandardSet(db.Model):
     """Here the teacher selects the standard set from which their standard originates"""
+
+    __tablename__ = 'goal_standard_set'
+
     goal_id = db.Column(db.Integer,
         db.ForeignKey('goals.id', ondelete='cascade'),
         primary_key=True)
@@ -230,6 +233,9 @@ class GoalStandardSet(db.Model):
 
 class GoalStandard(db.Model):
     """Here the teacher selects the standard the student's goal is attached to"""
+
+    __tablename__ = 'goal_standard'
+
     goal_id = db.Column(db.Integer,
         db.ForeignKey('goals.id', ondelete='cascade'),
         primary_key=True)
@@ -257,3 +263,54 @@ class ClassworkData(db.Model):
         default=datetime.date.today())
     attainment = db.Column(db.String,
         nullable=False)
+
+class MsgToTeacher(db.Model):
+
+    __tablename__ = 'msg_to_teacher'
+
+    id = db.Column(db.Integer,
+        primary_key=True,
+        autoincrement=True)
+
+    teacher_id = db.Column(db.Integer,
+        db.ForeignKey('teachers.id', ondelete='cascade'),
+        nullable=False)
+    guardian_id = db.Column(db.Integer,
+        db.ForeignKey('guardians.id', ondelete="cascade"),
+        primary_key=True,
+        nullable=False)
+    date_sent = db.Column(db.Date,
+        default=datetime.date.today())
+    subject = db.Column(db.String,
+        nullable=True)
+    attention_level = db.Column(db.String,
+        default='Take your time.')
+    message = db.Column(db.String,
+        nullable=False)
+
+class MsgToGuardian(db.Model):
+
+    __tablename__ = 'msg_to_guardian'
+
+    id = db.Column(db.Integer,
+        primary_key=True,
+        autoincrement=True)
+
+    teacher_id = db.Column(db.Integer,
+        db.ForeignKey('teachers.id', ondelete='cascade'),
+        nullable=False)
+    guardian_id = db.Column(db.Integer,
+        db.ForeignKey('guardians.id', ondelete="cascade"),
+        primary_key=True,
+        nullable=False)
+    date_sent = db.Column(db.Date,
+        default=datetime.date.today())
+    subject = db.Column(db.String,
+        nullable=True)
+    attention_level = db.Column(db.String,
+        default='Take your time.')
+    message = db.Column(db.String,
+        nullable=False)
+
+    teacher = db.relationship('Teacher')
+    guardian = db.relationship('Guardian')
