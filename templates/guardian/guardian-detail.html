@@ -18,10 +18,9 @@
                         </div>
                         <ul class="list-group list-group-flush">
                             {% for iep in student.student.ieps|reverse %}
-
-
+                                {% if iep.is_locked == True %}
                                     <li class="list-group-item" id="guardian-iep-li"><b><a href="/student/{{student.student.id}}/iep/{{iep.id}}">{{iep.date}}</a></b> || <small>by {{iep.teacher.first_name}} {{iep.teacher.last_name}}</small></li>
-
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </div>
