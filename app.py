@@ -60,8 +60,6 @@ def sort_sets_by_subject(subject_list, standard_set_list):
 
     return standard_sets_by_subject
 
-
-
 def get_standards(standard_set_code):
     standards = requests.get(f'http://commonstandardsproject.com/api/v1/standard_sets/{standard_set_code}').json()['data']['standards']
 
@@ -87,6 +85,9 @@ def append_zero_convert_to_string(int):
     else:
         return str(int)
 
+def remove_punc_characters(list):
+    strings_sanz_punc = [string.replace('\'', '') for string in list]
+    return strings_sanz_punc
 
 def login(user):
     """Log in user."""
@@ -512,13 +513,16 @@ def select_standard(goal_id):
 
     standards = get_standards(standard_set.standard_set_id)
 
-    standard_text = list(standards.keys())
+    standard_text = remove_punc_characters(list(standards.keys()))
 
     form = StandardForm()
 
     form.standard.choices = standard_text
 
+
     if form.validate_on_submit():
+
+
         standard = GoalStandard(goal_id=goal.id,
             standard_text=form.standard.data,
             standard_id=standards[form.standard.data])
