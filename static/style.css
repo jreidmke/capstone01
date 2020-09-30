@@ -52,3 +52,11 @@ label[for=attention_level-2] {
 textarea#message {
     margin: 10px;
 }
+
+#login-box {
+    background-color: grey;
+}
+
+#login-box-link {
+    color: whitesmoke
+}
