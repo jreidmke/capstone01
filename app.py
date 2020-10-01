@@ -6,6 +6,7 @@ from models import db, connect_db, School, Teacher, Student, Guardian, Family, I
 from forms import TeacherRegisterForm, GuardianRegisterForm, LoginForm, StudentRegisterForm, FamilyForm, GoalForm, ClassworkDataForm, CurrentClassworkDataForm, StandardSetForm, StandardForm, MsgToTeacherForm, MsgToGuardianForm
 from datetime import date
 from re import sub
+from helper import get_state_codes, get_standards_list, get_subject_list, get_grade_level_standard_sets, sort_sets_by_subject, get_standards, extract_username_from_selectfield, append_zero_convert_to_string, remove_punc_characters, login, logout
 
 # from wtforms_components import SelectWidget
 
@@ -24,85 +25,6 @@ connect_db(app)
 db.create_all()
 
 toolbar = DebugToolbarExtension(app)
-
-def get_state_codes():
-    states = requests.get('http://commonstandardsproject.com/api/v1/jurisdictions/').json()['data']
-    data = [standards for standards in states if standards["type"] == "state"]
-    return data
-
-def get_standards_list(state_code):
-    standards = requests.get(f'http://commonstandardsproject.com/api/v1/jurisdictions/{state_code}').json()['data']['standardSets']
-    return standards
-
-def get_subject_list(standards):
-    subject_list = [standard_subject["subject"] for standard_subject in standards]
-    return subject_list
-
-def get_grade_level_standard_sets(grade, standards):
-    """Returns all State Grade Level Standard Sets per grade in arguemnt
-    Organized by subject."""
-
-    grade_level_standards = [standard for standard in standards if grade in standard['educationLevels']]
-
-    return grade_level_standards
-
-def sort_sets_by_subject(subject_list, standard_set_list):
-    standard_sets_by_subject = {}
-
-    for subject in subject_list:
-        sub_list = []
-        for obj in standard_set_list:
-            if subject == obj["subject"]:
-                sub_list.append({'title': obj["document"]["title"],
-                    'id': obj["id"]})
-
-            standard_sets_by_subject[subject] = sub_list
-
-    return standard_sets_by_subject
-
-def get_standards(standard_set_code):
-    standards = requests.get(f'http://commonstandardsproject.com/api/v1/standard_sets/{standard_set_code}').json()['data']['standards']
-
-    standard_id_list = standards.keys()
-
-    des = []
-    for id in standard_id_list:
-        des.append(standards[id]['description'])
-
-    standards_dict = dict(zip(des, standard_id_list))
-
-    return standards_dict
-
-def extract_username_from_selectfield(string):
-    string = string.split()
-    username = string[-1]
-    return sub(r'[\(\)]', '', username)
-
-def append_zero_convert_to_string(int):
-    """The API formats single digit grades as strings with appended 0's (ex. 02, 07, 08)"""
-    if int <= 9:
-        return ('0' + str(int))
-    else:
-        return str(int)
-
-def remove_punc_characters(list):
-    strings_sanz_punc = [string.replace('\'', '') for string in list]
-    return strings_sanz_punc
-
-def login(user):
-    """Log in user."""
-    session[CURR_USER_KEY] = user.id
-    session[IS_TEACHER] = user.is_teacher
-
-def logout():
-    """Logout user."""
-
-    if CURR_USER_KEY in session:
-        del session[CURR_USER_KEY]
-
-    if IS_TEACHER in session:
-        del session[IS_TEACHER]
-
 
 # Landing page.
 
@@ -236,23 +158,31 @@ def to_guardian_message(teacher_id, student_id):
 
     guardians = Family.query.filter_by(student_id=student.id).all()
     guardian_ids = [guardian.guardian_id for guardian in guardians]
+
+
     guardians = Guardian.query.filter(Guardian.id.in_(guardian_ids)).all()
-    guardian_names = [guardian.first_name + ' ' + guardian.last_name + ' ' + f'({guardian.username})' for guardian in guardians]
+
+
+    # guardian_names = [guardian.first_name + ' ' + guardian.last_name + ' ' + f'({guardian.username})' for guardian in guardians]
+
+    guardian_list = [(g.id, g.first_name + " " + g.last_name) for g in guardians]
 
     iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
     goals = Goal.query.filter_by(iep_id=iep.id).all()
     goals = ["Not about specific goal"] + [goal.goal for goal in goals]
-
     if (session[IS_TEACHER] == True and session[CURR_USER_KEY] == teacher.id):
         form = MsgToGuardianForm()
         form.subject.choices = goals
-        form.guardian_id.choices = guardian_names
+        form.guardian_id.choices = guardian_list
 
         if form.validate_on_submit():
+            guardians =  request.form['guardian_id']
+
+            import pdb; pdb.set_trace()
+
+            # guardian_username = extract_username_from_selectfield(form.guardian_id.data)
 
 
-            guardian_username = extract_username_from_selectfield(form.guardian_id.data)
-            guardian = Guardian.query.filter_by(username=guardian_username).first()
 
             msg = MsgToGuardian(
                 teacher_id=teacher.id,
@@ -268,6 +198,7 @@ def to_guardian_message(teacher_id, student_id):
             flash(f'Message to {guardian.first_name} {guardian.last_name} sent on {msg.date_sent}', 'good')
             return redirect(f'/teacher/{teacher.id}')
         return render_template('/teacher/new-message.html', goals=goals, form=form, student=student)
+
 
     flash('You are not authorized to view this page.')
     return redirect('/teacher/login')
@@ -383,6 +314,8 @@ def to_teacher_message(guardian_id, student_id):
 def show_guardian_messages(guardian_id):
     guardian = Guardian.query.get(guardian_id)
     messages = MsgToGuardian.query.filter_by(guardian_id=guardian.id).all()
+    # messages = MsgToGuardian.query.filter(Guardian.id.in_(MsgToGuardian.guardian_id)).all()
+    # messages = MsgToGuardian.query.filter(MsgToGuardian.guardian_id.contains(guardian.id)).all()
     student_ids = [message.student_id for message in messages]
     students = Student.query.filter(Student.id.in_(student_ids)).all()
     return render_template('/guardian/messages.html', guardian=guardian, messages=messages, students=students)
