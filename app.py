@@ -170,23 +170,19 @@ def to_guardian_message(teacher_id, student_id):
     iep = IEP.query.filter_by(student_id=student.id).order_by(IEP.id.desc()).first()
     goals = Goal.query.filter_by(iep_id=iep.id).all()
     goals = ["Not about specific goal"] + [goal.goal for goal in goals]
+
     if (session[IS_TEACHER] == True and session[CURR_USER_KEY] == teacher.id):
         form = MsgToGuardianForm()
         form.subject.choices = goals
-        form.guardian_id.choices = guardian_list
+
 
         if form.validate_on_submit():
-            guardians =  request.form['guardian_id']
-
-            import pdb; pdb.set_trace()
-
-            # guardian_username = extract_username_from_selectfield(form.guardian_id.data)
-
-
+            guardians =  request.form.getlist('guardian_id')
+            guardians = [int(g) for g in guardians]
 
             msg = MsgToGuardian(
                 teacher_id=teacher.id,
-                guardian_id=guardian.id,
+                guardian_id=guardians,
                 student_id=student.id,
                 subject=form.subject.data,
                 attention_level=form.attention_level.data,
@@ -194,10 +190,9 @@ def to_guardian_message(teacher_id, student_id):
             )
             db.session.add(msg)
             db.session.commit()
-            guardian = Guardian.query.get(msg.guardian_id)
-            flash(f'Message to {guardian.first_name} {guardian.last_name} sent on {msg.date_sent}', 'good')
+            flash(f'Message to {student.first_name} {student.last_name} sent on {msg.date_sent}', 'good')
             return redirect(f'/teacher/{teacher.id}')
-        return render_template('/teacher/new-message.html', goals=goals, form=form, student=student)
+        return render_template('/teacher/new-message.html', goals=goals, form=form, student=student, guardians=guardians)
 
 
     flash('You are not authorized to view this page.')
@@ -313,11 +308,8 @@ def to_teacher_message(guardian_id, student_id):
 @app.route('/guardian/<int:guardian_id>/messages')
 def show_guardian_messages(guardian_id):
     guardian = Guardian.query.get(guardian_id)
-    messages = MsgToGuardian.query.filter_by(guardian_id=guardian.id).all()
-    # messages = MsgToGuardian.query.filter(Guardian.id.in_(MsgToGuardian.guardian_id)).all()
-    # messages = MsgToGuardian.query.filter(MsgToGuardian.guardian_id.contains(guardian.id)).all()
-    student_ids = [message.student_id for message in messages]
-    students = Student.query.filter(Student.id.in_(student_ids)).all()
+    messages = [m for m in MsgToGuardian.query.all() if guardian.id in m.guardian_id]
+    students = [s for s in Student.query.all() if s.id in [m.student_id for m in MsgToGuardian.query.all()]]
     return render_template('/guardian/messages.html', guardian=guardian, messages=messages, students=students)
 
 @app.route('/guardian/<int:guardian_id>/message/<int:message_id>')
