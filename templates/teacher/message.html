@@ -11,6 +11,8 @@
           <h6 class="card-subtitle mb-2 text-muted">{{message.date_sent}}</h6>
           <p class="card-text">{{message.message}}</p>
           <a href="/teacher/{{teacher.id}}/messages" class="card-link">Return to Mailbox</a>
+          <a href="/teacher/{{message.teacher_id}}/new-message/student/{{message.student_id}}" class="card-link text-right">Send Reply</a>
+
         </div>
     </div>
 </div>

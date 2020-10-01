@@ -10,7 +10,16 @@
 
         <h1>Write Message to {{student.first_name}} {{student.last_name}}'s Guardian</h1>
 
+
+
         <form method="POST" id="user_form">
+
+            <select name="guardian_id" id="guardian-id-input" multiple>
+                {% for guardian in guardians %}
+                    <option value="{{guardian.id}}">{{guardian.first_name}} {{guardian.last_name}}</option>
+                {% endfor %}
+            </select>
+
             {{ form.hidden_tag() }}
 
             {% for field in form if field.widget.input_type != 'hidden' %}
@@ -26,4 +35,7 @@
         </form>
     </div>
 </div>
+
+
+
 {% endblock %}

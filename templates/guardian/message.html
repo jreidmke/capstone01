@@ -10,7 +10,12 @@
           <h5 class="card-title">{{message.subject}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{message.date_sent}}</h6>
           <p class="card-text">{{message.message}}</p>
+
           <a href="/guardian/{{guardian.id}}/messages" class="card-link">Return to Mailbox</a>
+          <a href="/guardian/{{guardian.id}}/new-message/student/{{message.student_id}}" class="card-link text-right">Send Reply</a>
+
+
+
         </div>
     </div>
 </div>
