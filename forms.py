@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, IntegerField, TextAreaField, RadioField
+from wtforms import StringField, PasswordField, SelectField, IntegerField, TextAreaField, RadioField, SelectMultipleField
 from wtforms.validators import DataRequired, Length, EqualTo
 from wtforms.fields.html5 import DateField
 
@@ -79,11 +79,10 @@ class MsgToTeacherForm(FlaskForm):
 
     subject = SelectField('If this is about a specific goal, please select from list. If this is about another issue, leave this field blank.')
     attention_level = RadioField('Urgency Level', choices=['Take your time!', 'Please get back to me.', 'Urgent! Needs attention!'])
-    message = TextAreaField('Message', render_kw={'rows':20}, validators=[DataRequired()])
+    message = TextAreaField('Message', render_kw={'rows':10}, validators=[DataRequired()])
 
 class MsgToGuardianForm(FlaskForm):
 
     subject = SelectField('Select if message is about specific goal. Otherwise, leave blank.')
-    guardian_id = SelectField('Select Guardian', validators=[DataRequired()])
     attention_level = RadioField('Urgency Level', choices=['Take your time!', 'Please get back to me.', 'Urgent! Needs attention!'])
-    message = TextAreaField('Message', render_kw={'rows':20}, validators=[DataRequired()])
+    message = TextAreaField('Message', render_kw={'rows':10}, validators=[DataRequired()])
