@@ -1,6 +1,6 @@
 from app import db
 from datetime import date
-from models import School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData, GoalStandard, GoalStandardSet
+from models import School, Teacher, Student, Guardian, Family, IEP, Goal, ClassworkData, GoalStandard, GoalStandardSet, MsgToGuardian
 
 db.drop_all()
 db.create_all()
