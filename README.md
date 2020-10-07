@@ -23,8 +23,6 @@ To add a family, fill out the form using the data displayed in the Guardian Info
 ##### Messages:
 Click here to see your most recent messages.
 
-##
-
 ###Student List
 
 ##### Send a Message:
@@ -42,7 +40,6 @@ The current goals also include the student's *baseline*, *current*, and *level o
 ##### IEPs:
 To view a student's previous IEP's click on the link of the IEP Date. To create a new IEP, click **Create New IEP+**.
 
-##
 ###Creating a New IEP
 
 First, enter the student's goal text. Then select the subject the goal falls under. Complete the baseline data and select **Add Goal**. Next you will be prompted to select the standard set from which you will pulling you standard. And finally, you will select the aligned standard.
